@@ -8,12 +8,12 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @ManyToOne
+    @JoinColumn(name = "column_id")
+    private Company company;
+
     public User() {
     }
-
-    @ManyToOne
-    @JoinColumn(name = "company_id")
-    private Company company;
 
     public User(Integer id) {
         this.id = id;
