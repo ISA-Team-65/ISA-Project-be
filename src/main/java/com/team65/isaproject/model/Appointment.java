@@ -70,4 +70,12 @@ public class Appointment {
     public void setDuration(double duration) {
         this.duration = duration;
     }
+
+    public AppointmentStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(AppointmentStatus status) {
+        this.status = status;
+    }
 }

@@ -68,5 +68,13 @@ public class Equipment {
     public void setRating(double rating) {
         this.rating = rating;
     }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
 }
 
