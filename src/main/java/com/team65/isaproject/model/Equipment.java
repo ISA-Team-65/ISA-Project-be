@@ -18,6 +18,10 @@ public class Equipment {
     @Column(name = "price")
     private double price;
 
+    @ManyToOne
+    @JoinColumn(name = "company_id")
+    private Company company;
+
     public Equipment() {
     }
 

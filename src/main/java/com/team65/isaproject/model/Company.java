@@ -9,6 +9,7 @@ import java.util.List;
 public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "company_id")
     private Integer id;
 
     private String CompanyName;
@@ -21,17 +22,21 @@ public class Company {
 
     //@Column(name = "availableDates", nullable =
     @OneToMany(mappedBy = "company")
-    private List<Pickup> AvailableDates; //ovde ce da budu termini objekti ne dates
+    private List<Pickup> AvailableDates;
 
     //@Column(name = "administrators", nullable = true)
     @OneToMany(mappedBy = "company")
-    private List<User> CompanyAdministrators; //ovo treba lista usera da bude
+    private List<User> CompanyAdministrators;
+
+    @OneToMany(mappedBy = "company")
+    private List<Equipment> Equipments;
 
     public Company() {super();
-        CompanyAdministrators = new ArrayList<>();
-        AvailableDates = new ArrayList<>();}
+        CompanyAdministrators = new ArrayList<User>();
+        AvailableDates = new ArrayList<Pickup>();
+        Equipments = new ArrayList<Equipment>();}
 
-    public Company(Integer id, String companyName, String address, String description, String rating, List<Pickup> availableDates, List<User> companyAdministrators) {
+    public Company(Integer id, String companyName, String address, String description, String rating, List<Pickup> availableDates, List<User> companyAdministrators, List<Equipment> equipments) {
         this.id = id;
         CompanyName = companyName;
         Address = address;
@@ -39,6 +44,7 @@ public class Company {
         Rating = rating;
         AvailableDates = availableDates;
         CompanyAdministrators = companyAdministrators;
+        Equipments = equipments;
     }
 
     public Integer getId() {
@@ -101,5 +107,14 @@ public class Company {
 
     public void setCompanyAdministrators(List<User> companyAdministrators) {
         CompanyAdministrators = companyAdministrators;
+    }
+
+    @OneToMany(mappedBy = "company")
+    public List<Equipment> getEquipments() {
+        return Equipments;
+    }
+
+    public void setEquipments(List<Equipment> equipments) {
+        Equipments = equipments;
     }
 }
