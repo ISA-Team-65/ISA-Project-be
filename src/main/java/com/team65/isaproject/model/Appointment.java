@@ -17,6 +17,8 @@ public class Appointment {
     private LocalDateTime dateTime;
     @Column(name = "duration")
     private double duration;
+    @Column(name = "status")
+    private AppointmentStatus status;
 
     public Appointment() {
     }
