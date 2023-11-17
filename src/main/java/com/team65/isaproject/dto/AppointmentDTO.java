@@ -1,10 +1,8 @@
 package com.team65.isaproject.dto;
 
-import com.team65.isaproject.model.Appointment;
-import com.team65.isaproject.model.AppointmentStatus;
-import com.team65.isaproject.model.Company;
+import com.team65.isaproject.model.appointment.Appointment;
+import com.team65.isaproject.model.appointment.AppointmentStatus;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 
 public class AppointmentDTO {

@@ -1,4 +1,4 @@
-package com.team65.isaproject.model;
+package com.team65.isaproject.model.appointment;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

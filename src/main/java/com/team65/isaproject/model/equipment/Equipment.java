@@ -1,4 +1,4 @@
-package com.team65.isaproject.model;
+package com.team65.isaproject.model.equipment;
 
 import javax.persistence.*;
 

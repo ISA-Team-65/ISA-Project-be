@@ -1,9 +1,10 @@
 package com.team65.isaproject.model;
 
+import com.team65.isaproject.model.appointment.Appointment;
+import com.team65.isaproject.model.equipment.Equipment;
 import com.team65.isaproject.model.user.User;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
