@@ -11,40 +11,41 @@ public class Company {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "company_id")
     private Integer id;
+    @Column(name = "company_name", nullable = false)
+    private String companyName;
+    @OneToOne(mappedBy = "company",cascade = CascadeType.ALL)
+    private Address address;
+    @Column(name = "description", nullable = false)
+    private String description;
 
-    private String CompanyName;
-
-    private String Address;
-
-    private String Description;
-
-    private String Rating;
-
-    //@Column(name = "availableDates", nullable =
-    @OneToMany(mappedBy = "company")
-    private List<Pickup> AvailableDates;
-
-    //@Column(name = "administrators", nullable = true)
-    @OneToMany(mappedBy = "company")
-    private List<User> CompanyAdministrators;
+    @Column(name = "rating", nullable = false)
+    private double rating;
 
     @OneToMany(mappedBy = "company")
-    private List<Equipment> Equipments;
+    private List<Appointment> availableAppointments;
 
-    public Company() {super();
-        CompanyAdministrators = new ArrayList<User>();
-        AvailableDates = new ArrayList<Pickup>();
-        Equipments = new ArrayList<Equipment>();}
+    @OneToMany(mappedBy = "company")
+    private List<User> companyAdministrators;
 
-    public Company(Integer id, String companyName, String address, String description, String rating, List<Pickup> availableDates, List<User> companyAdministrators, List<Equipment> equipments) {
+    @OneToMany(mappedBy = "company")
+    private List<Equipment> equipments;
+
+    public Company() {
+        super();
+        companyAdministrators = new ArrayList<User>();
+        availableAppointments = new ArrayList<Appointment>();
+        equipments = new ArrayList<Equipment>();
+    }
+
+    public Company(Integer id, String companyName, Address address, String description, double rating, List<Appointment> availableAppointments, List<User> companyAdministrators, List<Equipment> equipments) {
         this.id = id;
-        CompanyName = companyName;
-        Address = address;
-        Description = description;
-        Rating = rating;
-        AvailableDates = availableDates;
-        CompanyAdministrators = companyAdministrators;
-        Equipments = equipments;
+        this.companyName = companyName;
+        this.address = address;
+        this.description = description;
+        this.rating = rating;
+        this.availableAppointments = availableAppointments;
+        this.companyAdministrators = companyAdministrators;
+        this.equipments = equipments;
     }
 
     public Integer getId() {
@@ -55,66 +56,59 @@ public class Company {
         this.id = id;
     }
 
-    @Column(name = "company name", nullable = false)
     public String getCompanyName() {
-        return CompanyName;
+        return companyName;
     }
 
     public void setCompanyName(String companyName) {
-        CompanyName = companyName;
+        this.companyName = companyName;
     }
 
-    @Column(name = "address", nullable = false)
-    public String getAddress() {
-        return Address;
+    public Address getAddress() {
+        return address;
     }
 
-    public void setAddress(String address) {
-        Address = address;
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
-    @Column(name = "description", nullable = false)
     public String getDescription() {
-        return Description;
+        return description;
     }
 
     public void setDescription(String description) {
-        Description = description;
+        this.description = description;
     }
 
-    @Column(name = "rating", nullable = false)
-    public String getRating() {
-        return Rating;
+    public double getRating() {
+        return rating;
     }
 
-    public void setRating(String rating) {
-        Rating = rating;
+    public void setRating(double rating) {
+        this.rating = rating;
     }
 
-    @OneToMany(mappedBy = "company")
-    public List<Pickup> getAvailableDates() {
-        return AvailableDates;
+    public List<Appointment> getAvailableAppointments() {
+        return availableAppointments;
     }
 
-    public void setAvailableDates(List<Pickup> availableDates) {
-        this.AvailableDates = availableDates;
+    public void setAvailableAppointments(List<Appointment> availableAppointments) {
+        this.availableAppointments = availableAppointments;
     }
 
-    @OneToMany(mappedBy = "company")
     public List<User> getCompanyAdministrators() {
-        return CompanyAdministrators;
+        return companyAdministrators;
     }
 
     public void setCompanyAdministrators(List<User> companyAdministrators) {
-        CompanyAdministrators = companyAdministrators;
+        this.companyAdministrators = companyAdministrators;
     }
 
-    @OneToMany(mappedBy = "company")
     public List<Equipment> getEquipments() {
-        return Equipments;
+        return equipments;
     }
 
     public void setEquipments(List<Equipment> equipments) {
-        Equipments = equipments;
+        this.equipments = equipments;
     }
 }

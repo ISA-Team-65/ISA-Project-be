@@ -19,16 +19,20 @@ public class Appointment {
     private double duration;
     @Column(name = "status")
     private AppointmentStatus status;
-
+    @ManyToOne
+    @JoinColumn(name = "company_id") // Dodato
+    private Company company;
     public Appointment() {
     }
 
-    public Appointment(Integer id, String adminName, String adminLastname, LocalDateTime dateTime, double duration) {
+    public Appointment(Integer id, String adminName, String adminLastname, LocalDateTime dateTime, double duration, AppointmentStatus status, Company company) {
         this.id = id;
         this.adminName = adminName;
         this.adminLastname = adminLastname;
         this.dateTime = dateTime;
         this.duration = duration;
+        this.status = status;
+        this.company = company;
     }
 
     public Integer getId() {
@@ -77,5 +81,13 @@ public class Appointment {
 
     public void setStatus(AppointmentStatus status) {
         this.status = status;
+    }
+
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
     }
 }

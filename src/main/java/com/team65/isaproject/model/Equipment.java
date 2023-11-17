@@ -9,7 +9,7 @@ public class Equipment {
     private Integer id;
     @Column(name = "name")
     private String name;
-    @Column(name = "equipmentType")
+    @Column(name = "equipment_type")
     private EquipmentType type;
     @Column(name = "description")
     private String description;
@@ -25,12 +25,14 @@ public class Equipment {
     public Equipment() {
     }
 
-    public Equipment(Integer id, String name, EquipmentType type, String description, double rating) {
+    public Equipment(Integer id, String name, EquipmentType type, String description, double rating, double price, Company company) {
         this.id = id;
         this.name = name;
         this.type = type;
         this.description = description;
         this.rating = rating;
+        this.price = price;
+        this.company = company;
     }
 
     public Integer getId() {
@@ -79,6 +81,14 @@ public class Equipment {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
     }
 }
 
