@@ -1,8 +1,8 @@
 package com.team65.isaproject.dto;
 
 import com.team65.isaproject.model.*;
+import com.team65.isaproject.model.user.User;
 
-import javax.persistence.OneToMany;
 import java.util.List;
 
 public class CompanyDTO {
