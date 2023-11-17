@@ -13,11 +13,11 @@ VALUES
 --     (-3, 'Country3', 'City3', 'Street3', 789, 78.901, 23.456, -3);
 
 -- INSERT za tabelu Appointment
-INSERT INTO Appointment (id, admin_name, admin_lastname, appointment_date_time, duration, status, company_id)
+INSERT INTO Appointment (id, admin_name, admin_lastname, appointment_date_time, duration, status, company_id, is_reserved)
 VALUES
-    (-1, 'Admin1', 'AdminLastname1', '2023-01-01 10:00:00', 1.5, 0, -1),
-    (-2, 'Admin2', 'AdminLastname2', '2023-01-02 14:30:00', 2.0, 1, -2),
-    (-3, 'Admin3', 'AdminLastname3', '2023-01-03 16:45:00', 1.8, 1, -3);
+    (-1, 'Admin1', 'AdminLastname1', '2023-01-01 10:00:00', 1.5, 0, -1, FALSE),
+    (-2, 'Admin2', 'AdminLastname2', '2023-01-02 14:30:00', 2.0, 1, -2, FALSE),
+    (-3, 'Admin3', 'AdminLastname3', '2023-01-03 16:45:00', 1.8, 1, -3, FALSE);
 
 -- INSERT za tabelu Equipment
 -- INSERT za tabelu Equipment
