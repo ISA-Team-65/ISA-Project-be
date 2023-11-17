@@ -1,13 +1,37 @@
-insert into company (company_id, address, company_name, description, rating) values (1, '123 Main St', 'ABC Corp', 'A technology company', 4.5);
-insert into company (company_id, address, company_name, description, rating) values (2, '456 Oak Ave', 'XYZ Ltd', 'A manufacturing company', 3.8);
-insert into company (company_id, address, company_name, description, rating) values (3, '789 Elm Blvd', '123 Industries', 'An innovative startup', 4.2);
-insert into company (company_id, address, company_name, description, rating) values (4, '555 Pine Lane', 'Global Innovations', 'Multinational corporation', 4.9);
-insert into company (company_id, address, company_name, description, rating) values (5, '101 Cedar Street', 'Tech Solutions Inc.', 'IT consulting firm', 3.5);
+-- INSERT za tabelu Company
+INSERT INTO Company (company_id, company_name, description, rating)
+VALUES
+    (1, 'Company1', 'Description1', 4.5),
+    (2, 'Company2', 'Description2', 3.8),
+    (3, 'Company3', 'Description3', 4.2);
 
-insert into administrator_complaint (ad_complaint_id, administrator_id, description) values (1, 101, 'User reported an issue with account access');
-insert into administrator_complaint (ad_complaint_id, administrator_id, description) values (2, 102, 'Complaint regarding system performance.');
-insert into administrator_complaint (ad_complaint_id, administrator_id, description) values (3, 103, 'User raised concerns about data security.');
+-- INSERT za tabelu Address
+INSERT INTO Address (id, country, city, street, street_number, longitude, latitude, company_id)
+VALUES
+    (1, 'Country1', 'City1', 'Street1', 123, 45.678, 34.567, 1),
+    (2, 'Country2', 'City2', 'Street2', 456, 12.345, 67.890, 2),
+    (3, 'Country3', 'City3', 'Street3', 789, 78.901, 23.456, 3);
 
-insert into company_complaint (comp_complaint_id, company_id, description) values (1, 2, 'Customer reported a product quality issue.');
-insert into company_complaint (comp_complaint_id, company_id, description) values (2, 3, 'Complaint about delayed shipment.');
-insert into company_complaint (comp_complaint_id, company_id, description) values (3, 5, 'User dissatisfaction with customer service.');
+-- INSERT za tabelu Appointment
+INSERT INTO Appointment (id, admin_name, admin_lastname, appointment_date_time, duration, status, company_id)
+VALUES
+    (1, 'Admin1', 'AdminLastname1', '2023-01-01 10:00:00', 1.5, 0, 1),
+    (2, 'Admin2', 'AdminLastname2', '2023-01-02 14:30:00', 2.0, 1, 2),
+    (3, 'Admin3', 'AdminLastname3', '2023-01-03 16:45:00', 1.8, 1, 3);
+
+-- INSERT za tabelu Equipment
+-- INSERT za tabelu Equipment
+INSERT INTO public.Equipment (id, name, equipment_type, description, rating, price, company_id)
+VALUES
+    (1, 'Equipment1', 0, 'Description1', 4.2, 150.0, 1),  -- 0 odgovara ordinalnoj vrednosti za TYPE1
+    (2, 'Equipment2', 1, 'Description2', 3.9, 120.0, 2),  -- 1 odgovara ordinalnoj vrednosti za TYPE2
+    (3, 'Equipment3', 2, 'Description3', 4.5, 180.0, 3);  -- 2 odgovara ordinalnoj vrednosti za TYPE3
+
+
+-- INSERT za tabelu User (primer za listu korisnika vezanih za kompaniju)
+INSERT INTO Userr (id, company_id)
+VALUES
+    (1, 1),
+    (2, 2),
+    (3, 3);
+
