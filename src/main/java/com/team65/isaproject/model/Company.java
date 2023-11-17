@@ -12,39 +12,39 @@ public class Company {
     @Column(name = "company_id")
     private Integer id;
 
-    private String CompanyName;
+    private String companyName;
 
-    private String Address;
+    private String address;
 
-    private String Description;
+    private String description;
 
-    private String Rating;
+    private Double rating;
 
     //@Column(name = "availableDates", nullable =
     @OneToMany(mappedBy = "company")
-    private List<Pickup> AvailableDates;
+    private List<Pickup> availableDates;
 
     //@Column(name = "administrators", nullable = true)
     @OneToMany(mappedBy = "company")
-    private List<User> CompanyAdministrators;
+    private List<User> companyAdministrators;
 
     @OneToMany(mappedBy = "company")
-    private List<Equipment> Equipments;
+    private List<Equipment> equipments;
 
     public Company() {super();
-        CompanyAdministrators = new ArrayList<User>();
-        AvailableDates = new ArrayList<Pickup>();
-        Equipments = new ArrayList<Equipment>();}
+        this.companyAdministrators = new ArrayList<User>();
+        this.availableDates = new ArrayList<Pickup>();
+        this.equipments = new ArrayList<Equipment>();}
 
-    public Company(Integer id, String companyName, String address, String description, String rating, List<Pickup> availableDates, List<User> companyAdministrators, List<Equipment> equipments) {
+    public Company(Integer id, String companyName, String address, String description, Double rating, List<Pickup> availableDates, List<User> companyAdministrators, List<Equipment> equipments) {
         this.id = id;
-        CompanyName = companyName;
-        Address = address;
-        Description = description;
-        Rating = rating;
-        AvailableDates = availableDates;
-        CompanyAdministrators = companyAdministrators;
-        Equipments = equipments;
+        this.companyName = companyName;
+        this.address = address;
+        this.description = description;
+        this.rating = rating;
+        this.availableDates = availableDates;
+        this.companyAdministrators = companyAdministrators;
+        this.equipments = equipments;
     }
 
     public Integer getId() {
@@ -57,64 +57,64 @@ public class Company {
 
     @Column(name = "company name", nullable = false)
     public String getCompanyName() {
-        return CompanyName;
+        return companyName;
     }
 
     public void setCompanyName(String companyName) {
-        CompanyName = companyName;
+        this.companyName = companyName;
     }
 
     @Column(name = "address", nullable = false)
     public String getAddress() {
-        return Address;
+        return address;
     }
 
     public void setAddress(String address) {
-        Address = address;
+        this.address = address;
     }
 
     @Column(name = "description", nullable = false)
     public String getDescription() {
-        return Description;
+        return description;
     }
 
     public void setDescription(String description) {
-        Description = description;
+        this.description = description;
     }
 
     @Column(name = "rating", nullable = false)
-    public String getRating() {
-        return Rating;
+    public Double getRating() {
+        return rating;
     }
 
-    public void setRating(String rating) {
-        Rating = rating;
+    public void setRating(Double rating) {
+        this.rating = rating;
     }
 
     @OneToMany(mappedBy = "company")
     public List<Pickup> getAvailableDates() {
-        return AvailableDates;
+        return availableDates;
     }
 
     public void setAvailableDates(List<Pickup> availableDates) {
-        this.AvailableDates = availableDates;
+        this.availableDates = availableDates;
     }
 
     @OneToMany(mappedBy = "company")
     public List<User> getCompanyAdministrators() {
-        return CompanyAdministrators;
+        return companyAdministrators;
     }
 
     public void setCompanyAdministrators(List<User> companyAdministrators) {
-        CompanyAdministrators = companyAdministrators;
+        this.companyAdministrators = companyAdministrators;
     }
 
     @OneToMany(mappedBy = "company")
     public List<Equipment> getEquipments() {
-        return Equipments;
+        return equipments;
     }
 
     public void setEquipments(List<Equipment> equipments) {
-        Equipments = equipments;
+        this.equipments = equipments;
     }
 }

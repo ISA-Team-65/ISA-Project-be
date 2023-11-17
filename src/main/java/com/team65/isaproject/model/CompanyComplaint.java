@@ -14,15 +14,15 @@ public class CompanyComplaint {
     //za sad anonimno
 
     private String description;
-    private Integer company_id;
+    private Integer companyId;
 
     public CompanyComplaint() {
     }
 
-    public CompanyComplaint(Integer id, String description, Integer company_id) {
+    public CompanyComplaint(Integer id, String description, Integer companyId) {
         this.id = id;
         this.description = description;
-        this.company_id = company_id;
+        this.companyId = companyId;
     }
 
     public Integer getId() {
@@ -43,11 +43,11 @@ public class CompanyComplaint {
     }
 
     @Column(name = "company_id")
-    public Integer getCompany_id() {
-        return company_id;
+    public Integer getCompanyId() {
+        return companyId;
     }
 
-    public void setCompany_id(Integer company_id) {
-        this.company_id = company_id;
+    public void setCompanyId(Integer companyId) {
+        this.companyId = companyId;
     }
 }
