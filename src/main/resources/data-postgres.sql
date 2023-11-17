@@ -31,7 +31,8 @@ VALUES
 -- INSERT za tabelu User (primer za listu korisnika vezanih za kompaniju)
 
 INSERT INTO Userr (id, email, password, first_name, last_name, address, phone_number, profession, type, company_id)
-    (1, 'peraperic@gmail.com', 'pera123', 'Pera', 'Peric', 'Melhiora Erdujheljija 2', '+38763245234', 'programmer', 0, -1),
-    (2, 'peraperic@gmail.com', 'pera123', 'Pera', 'Peric', 'Melhiora Erdujheljija 2', '+38763245234', 'programmer', 0, -2),
-    (3, 'peraperic@gmail.com', 'pera123', 'Pera', 'Peric', 'Melhiora Erdujheljija 2', '+38763245234', 'programmer', 0, -3);
+VALUES
+    (-1, 'peraperic@gmail.com', 'pera123', 'Pera', 'Peric', 'Melhiora Erdujheljija 2', '+38763245234', 'programmer', 0, -1),
+    (-2, 'peraperic@gmail.com', 'pera123', 'Pera', 'Peric', 'Melhiora Erdujheljija 2', '+38763245234', 'programmer', 0, -2),
+    (-3, 'peraperic@gmail.com', 'pera123', 'Pera', 'Peric', 'Melhiora Erdujheljija 2', '+38763245234', 'programmer', 0, -3);
 
