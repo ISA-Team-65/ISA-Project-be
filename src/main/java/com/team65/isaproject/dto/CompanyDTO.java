@@ -1,6 +1,7 @@
 package com.team65.isaproject.dto;
 
 import com.team65.isaproject.model.*;
+import com.team65.isaproject.model.user.User;
 
 import java.util.List;
 
