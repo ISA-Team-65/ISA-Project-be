@@ -13,6 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "api/equipment")
 public class EquipmentController {
@@ -45,5 +48,22 @@ public class EquipmentController {
         }
 
         return new ResponseEntity<>(new EquipmentDTO(equipment), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/byCompanyId/{id}")
+    public ResponseEntity<List<EquipmentDTO>> getAllByCompanyId(@PathVariable Integer id){
+        List<Equipment> equipment = equipmentService.getAllEquipmentByCompanyId(id);
+
+        List<EquipmentDTO> equipmentDTOS = new ArrayList<>();
+
+        for(Equipment e : equipment){
+            equipmentDTOS.add(new EquipmentDTO(e));
+        }
+
+        if(equipmentDTOS.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(equipmentDTOS, HttpStatus.OK);
     }
 }

@@ -6,6 +6,7 @@ import com.team65.isaproject.repository.EquipmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -34,4 +35,16 @@ public class EquipmentService {
         return equipmentRepository.save(equipment);
     }
 
+    public List<Equipment> getAllEquipmentByCompanyId(Integer id){
+
+        ArrayList<Equipment> equipment = new ArrayList<>();
+
+        for(Equipment e : findAll()){
+            if(e.getCompany_id().equals(id)){
+                equipment.add(e);
+            }
+        }
+
+        return equipment;
+    }
 }
