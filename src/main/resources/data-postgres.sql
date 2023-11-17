@@ -16,7 +16,7 @@ VALUES
 INSERT INTO Appointment (id, admin_name, admin_lastname, appointment_date_time, duration, status, company_id, is_reserved)
 VALUES
     (-1, 'Admin1', 'AdminLastname1', '2023-01-01 10:00:00', 1.5, 0, -1, FALSE),
-    (-2, 'Admin2', 'AdminLastname2', '2023-01-02 14:30:00', 2.0, 1, -2, FALSE),
+    (-2, 'Admin2', 'AdminLastname2', '2023-01-02 14:30:00', 2.0, 1, -1, FALSE),
     (-3, 'Admin3', 'AdminLastname3', '2023-01-03 16:45:00', 1.8, 1, -3, FALSE);
 
 -- INSERT za tabelu Equipment
@@ -25,7 +25,7 @@ INSERT INTO public.Equipment (id, name, equipment_type, description, rating, pri
 VALUES
     (-1, 'Equipment1', 0, 'Description1', 4.2, 150.0, -1),  -- 0 odgovara ordinalnoj vrednosti za TYPE1
     (-2, 'Equipment2', 1, 'Description2', 3.9, 120.0, -2),  -- 1 odgovara ordinalnoj vrednosti za TYPE2
-    (-3, 'Equipment3', 2, 'Description3', 4.5, 180.0, -3);  -- 2 odgovara ordinalnoj vrednosti za TYPE3
+    (-3, 'Equipment3', 2, 'Description3', 4.5, 180.0, -1);  -- 2 odgovara ordinalnoj vrednosti za TYPE3
 
 
 -- INSERT za tabelu User (primer za listu korisnika vezanih za kompaniju)
