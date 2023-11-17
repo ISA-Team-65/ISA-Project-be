@@ -9,6 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "api/appointments")
 public class AppointmentController {
@@ -42,6 +45,23 @@ public class AppointmentController {
         }
 
         return new ResponseEntity<>(new AppointmentDTO(appointment), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/byCompanyId/{id}")
+    public ResponseEntity<List<AppointmentDTO>> getAllByCompanyId(@PathVariable Integer id){
+        List<Appointment> appointments = appointmentService.getAllAppointmentsByCompanyId(id);
+
+        List<AppointmentDTO> appointmentDTOS = new ArrayList<>();
+
+        for(Appointment a : appointments){
+            appointmentDTOS.add(new AppointmentDTO(a));
+        }
+
+        if(appointmentDTOS.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(appointmentDTOS, HttpStatus.OK);
     }
 
 }
