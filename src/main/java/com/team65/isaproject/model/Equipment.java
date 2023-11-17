@@ -18,21 +18,20 @@ public class Equipment {
     @Column(name = "price")
     private double price;
 
-    @ManyToOne
-    @JoinColumn(name = "company_id")
-    private Company company;
+    @Column(name = "company_id")
+    private Integer company_id;
 
     public Equipment() {
     }
 
-    public Equipment(Integer id, String name, EquipmentType type, String description, double rating, double price, Company company) {
+    public Equipment(Integer id, String name, EquipmentType type, String description, double rating, double price, Integer company_id) {
         this.id = id;
         this.name = name;
         this.type = type;
         this.description = description;
         this.rating = rating;
         this.price = price;
-        this.company = company;
+        this.company_id = company_id;
     }
 
     public Integer getId() {
@@ -83,12 +82,12 @@ public class Equipment {
         this.price = price;
     }
 
-    public Company getCompany() {
-        return company;
+    public Integer getCompany_id() {
+        return company_id;
     }
 
-    public void setCompany(Company company) {
-        this.company = company;
+    public void setCompany_id(Integer company_id) {
+        this.company_id = company_id;
     }
 }
 
