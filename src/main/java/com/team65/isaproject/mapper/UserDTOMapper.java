@@ -1,8 +1,6 @@
 package com.team65.isaproject.mapper;
 
-import com.team65.isaproject.dto.AppointmentDTO;
 import com.team65.isaproject.dto.UserDTO;
-import com.team65.isaproject.model.appointment.Appointment;
 import com.team65.isaproject.model.user.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
