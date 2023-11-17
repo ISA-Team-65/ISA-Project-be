@@ -9,6 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "api/companies")
 public class CompanyController {
@@ -42,5 +45,16 @@ public class CompanyController {
         }
 
         return new ResponseEntity<>(new CompanyDTO(company), HttpStatus.OK);
+    }
+
+    @GetMapping("/search/by-name")
+    public ResponseEntity<List<CompanyDTO>> searchCompaniesByPrefix(@RequestParam String prefix) {
+        List<Company> companies = companyService.searchCompaniesByPrefix(prefix);
+        List<CompanyDTO> companyDTOS = new ArrayList<>();
+        for (Company company : companies) {
+            CompanyDTO companyDTO = CompanyDTOMapper.fromCompanytoDTO(company);
+            companyDTOS.add(companyDTO);
+        }
+        return new ResponseEntity<>(companyDTOS, HttpStatus.OK);
     }
 }
