@@ -15,7 +15,7 @@ public class AppointmentDTO {
     private LocalDateTime dateTime;
     private double duration;
     private AppointmentStatus status;
-    private Company company;
+    private Integer company_id;
 
     public AppointmentDTO() {
     }
@@ -27,6 +27,6 @@ public class AppointmentDTO {
         dateTime = appointment.getDateTime();
         duration = appointment.getDuration();
         status = appointment.getStatus();
-
+        company_id = appointment.getCompany_id();
     }
 }
