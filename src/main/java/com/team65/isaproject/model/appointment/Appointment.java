@@ -21,10 +21,14 @@ public class Appointment {
     private AppointmentStatus status;
     @Column(name = "company_id") // Dodato
     private Integer company_id;
+
+    @Column(name = "is_reserved")
+    private boolean isReserved;
+
     public Appointment() {
     }
 
-    public Appointment(Integer id, String adminName, String adminLastname, LocalDateTime dateTime, double duration, AppointmentStatus status, Integer company_id) {
+    public Appointment(Integer id, String adminName, String adminLastname, LocalDateTime dateTime, double duration, AppointmentStatus status, Integer company_id, boolean isReserved) {
         this.id = id;
         this.adminName = adminName;
         this.adminLastname = adminLastname;
@@ -32,6 +36,7 @@ public class Appointment {
         this.duration = duration;
         this.status = status;
         this.company_id = company_id;
+        this.isReserved = isReserved;
     }
 
     public Integer getId() {
@@ -88,5 +93,13 @@ public class Appointment {
 
     public void setCompany_id(Integer company_id) {
         this.company_id = company_id;
+    }
+
+    public boolean isReserved() {
+        return isReserved;
+    }
+
+    public void setReserved(boolean reserved) {
+        isReserved = reserved;
     }
 }
