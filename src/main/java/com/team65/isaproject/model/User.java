@@ -9,16 +9,15 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "company_id") // Dodato
-    private Company company;
+    @Column(name = "company_id") // Dodato
+    private Integer company_id;
 
     public User() {
     }
 
-    public User(Integer id, Company company) {
+    public User(Integer id, Integer company_id) {
         this.id = id;
-        this.company = company;
+        this.company_id = company_id;
     }
 
     public Integer getId() {
@@ -29,11 +28,11 @@ public class User {
         this.id = id;
     }
 
-    public Company getCompany() {
-        return company;
+    public Integer getCompany_id() {
+        return company_id;
     }
 
-    public void setCompany(Company company) {
-        this.company = company;
+    public void setCompany_id(Integer company_id) {
+        this.company_id = company_id;
     }
 }

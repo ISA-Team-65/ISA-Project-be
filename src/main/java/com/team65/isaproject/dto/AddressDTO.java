@@ -1,39 +1,35 @@
-//package com.team65.isaproject.model;
+//package com.team65.isaproject.dto;
 //
-//import javax.persistence.*;
+//import com.team65.isaproject.model.Address;
+//import com.team65.isaproject.model.Company;
 //
-//@Entity
-//public class Address {
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//import javax.persistence.Column;
+//import javax.persistence.JoinColumn;
+//import javax.persistence.OneToOne;
+//
+//public class AddressDTO {
+//
 //    private Integer id;
-//    @Column(name = "country")
 //    private String country;
-//    @Column(name = "city")
 //    private String city;
-//    @Column(name = "street")
 //    private String street;
-//    @Column(name = "street_number")
 //    private Integer streetNumber;
-//    @Column(name = "longitude")
 //    private double longitude;
-//    @Column(name = "latitude")
 //    private double latitude;
-//    @Column(name = "company_id") // Dodato
-//    private Integer companyId;
+//    private Company company;
 //
-//    public Address() {
+//    public AddressDTO() {
 //    }
 //
-//    public Address(Integer id, String country, String city, String street, Integer streetNumber, double longitude, double latitude, Integer companyId) {
-//        this.id = id;
-//        this.country = country;
-//        this.city = city;
-//        this.street = street;
-//        this.streetNumber = streetNumber;
-//        this.longitude = longitude;
-//        this.latitude = latitude;
-//        this.companyId = companyId;
+//    public AddressDTO(Address address) {
+//        id = address.getId();
+//        country = address.getCountry();
+//        city = address.getCity();
+//        street = address.getStreet();
+//        streetNumber = address.getStreetNumber();
+//        longitude = address.getLongitude();
+//        latitude = address.getLatitude();
+//        company = address.getCompany();
 //    }
 //
 //    public Integer getId() {
@@ -92,11 +88,11 @@
 //        this.latitude = latitude;
 //    }
 //
-//    public Integer getCompanyId() {
-//        return companyId;
+//    public Company getCompany() {
+//        return company;
 //    }
 //
-//    public void setCompanyId(Integer companyId) {
-//        this.companyId = companyId;
+//    public void setCompany(Company company) {
+//        this.company = company;
 //    }
 //}

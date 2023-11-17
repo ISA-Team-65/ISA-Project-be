@@ -2,18 +2,17 @@ package com.team65.isaproject.dto;
 
 import com.team65.isaproject.model.*;
 
-import javax.persistence.OneToMany;
 import java.util.List;
 
 public class CompanyDTO {
     private Integer id;
     private String companyName;
-    private Address address;
+    private String address;
     private String description;
     private double rating;
-    private List<Appointment> availableAppointments;
-    private List<User> companyAdministrators;
-    private List<Equipment> equipments;
+//    private List<Appointment> availableAppointments;
+//    private List<User> companyAdministrators;
+//    private List<Equipment> equipments;
 
     public CompanyDTO() {
     }
@@ -24,9 +23,9 @@ public class CompanyDTO {
         address = company.getAddress();
         description = company.getDescription();
         rating = company.getRating();
-        availableAppointments = company.getAvailableAppointments();
-        companyAdministrators = company.getCompanyAdministrators();
-        equipments = company.getEquipments();
+//        availableAppointments = company.getAvailableAppointments();
+//        companyAdministrators = company.getCompanyAdministrators();
+//        equipments = company.getEquipment();
     }
 
     public Integer getId() {
@@ -45,11 +44,11 @@ public class CompanyDTO {
         this.companyName = companyName;
     }
 
-    public Address getAddress() {
+    public String getAddress() {
         return address;
     }
 
-    public void setAddress(Address address) {
+    public void setAddress(String address) {
         this.address = address;
     }
 
@@ -69,27 +68,27 @@ public class CompanyDTO {
         this.rating = rating;
     }
 
-    public List<Appointment> getAvailableAppointments() {
-        return availableAppointments;
-    }
-
-    public void setAvailableAppointments(List<Appointment> availableAppointments) {
-        this.availableAppointments = availableAppointments;
-    }
-
-    public List<User> getCompanyAdministrators() {
-        return companyAdministrators;
-    }
-
-    public void setCompanyAdministrators(List<User> companyAdministrators) {
-        this.companyAdministrators = companyAdministrators;
-    }
-
-    public List<Equipment> getEquipments() {
-        return equipments;
-    }
-
-    public void setEquipments(List<Equipment> equipments) {
-        this.equipments = equipments;
-    }
+//    public List<Appointment> getAvailableAppointments() {
+//        return availableAppointments;
+//    }
+//
+//    public void setAvailableAppointments(List<Appointment> availableAppointments) {
+//        this.availableAppointments = availableAppointments;
+//    }
+//
+//    public List<User> getCompanyAdministrators() {
+//        return companyAdministrators;
+//    }
+//
+//    public void setCompanyAdministrators(List<User> companyAdministrators) {
+//        this.companyAdministrators = companyAdministrators;
+//    }
+//
+//    public List<Equipment> getEquipments() {
+//        return equipments;
+//    }
+//
+//    public void setEquipments(List<Equipment> equipments) {
+//        this.equipments = equipments;
+//    }
 }
