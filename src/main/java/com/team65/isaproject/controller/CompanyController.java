@@ -7,10 +7,7 @@ import com.team65.isaproject.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "api/companies")
@@ -32,5 +29,18 @@ public class CompanyController {
         Company company = CompanyDTOMapper.fromDTOtoCompany(companyDTO);
         company = companyService.save(company);
         return new ResponseEntity<>(new CompanyDTO(company), HttpStatus.CREATED);
+    }
+
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<CompanyDTO> getCompany(@PathVariable Integer id)
+    {
+        Company company = companyService.findById(id);
+
+        if (company == null)
+        {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(new CompanyDTO(company), HttpStatus.OK);
     }
 }

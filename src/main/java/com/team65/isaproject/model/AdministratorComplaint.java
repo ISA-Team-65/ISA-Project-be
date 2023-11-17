@@ -9,15 +9,15 @@
 //    @Column(name = "ad_complaint_id")
 //    private Integer id;
 //
-//    private Integer administrator_id;
+//    private Integer administratorId;
 //    private String description;
 //
 //    public AdministratorComplaint() {
 //    }
 //
-//    public AdministratorComplaint(Integer id, Integer administrator_id, String description) {
+//    public AdministratorComplaint(Integer id, Integer administratorId, String description) {
 //        this.id = id;
-//        this.administrator_id = administrator_id;
+//        this.administratorId = administratorId;
 //        this.description = description;
 //    }
 //
@@ -31,11 +31,11 @@
 //
 //    @Column(name = "admin_id")
 //    public Integer getAdministrator_id() {
-//        return administrator_id;
+//        return administratorId;
 //    }
 //
 //    public void setAdministrator_id(Integer administrator_id) {
-//        this.administrator_id = administrator_id;
+//        this.administratorId = administrator_id;
 //    }
 //
 //    @Column(name = "description")
