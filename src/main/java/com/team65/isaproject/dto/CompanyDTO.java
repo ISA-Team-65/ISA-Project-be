@@ -69,12 +69,12 @@ public class CompanyDTO {
         this.rating = rating;
     }
 
-    public List<Appointment> getAvailableDates() {
+    public List<Appointment> getAvailableAppointments() {
         return availableAppointments;
     }
 
-    public void setAvailableDates(List<Appointment> availableDates) {
-        this.availableAppointments = availableDates;
+    public void setAvailableAppointments(List<Appointment> availableAppointments) {
+        this.availableAppointments = availableAppointments;
     }
 
     public List<User> getCompanyAdministrators() {
