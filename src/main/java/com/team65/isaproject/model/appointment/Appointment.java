@@ -1,4 +1,4 @@
-package com.team65.isaproject.model;
+package com.team65.isaproject.model.appointment;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -19,20 +19,19 @@ public class Appointment {
     private double duration;
     @Column(name = "status")
     private AppointmentStatus status;
-    @ManyToOne
-    @JoinColumn(name = "company_id") // Dodato
-    private Company company;
+    @Column(name = "company_id") // Dodato
+    private Integer company_id;
     public Appointment() {
     }
 
-    public Appointment(Integer id, String adminName, String adminLastname, LocalDateTime dateTime, double duration, AppointmentStatus status, Company company) {
+    public Appointment(Integer id, String adminName, String adminLastname, LocalDateTime dateTime, double duration, AppointmentStatus status, Integer company_id) {
         this.id = id;
         this.adminName = adminName;
         this.adminLastname = adminLastname;
         this.dateTime = dateTime;
         this.duration = duration;
         this.status = status;
-        this.company = company;
+        this.company_id = company_id;
     }
 
     public Integer getId() {
@@ -83,11 +82,11 @@ public class Appointment {
         this.status = status;
     }
 
-    public Company getCompany() {
-        return company;
+    public Integer getCompany_id() {
+        return company_id;
     }
 
-    public void setCompany(Company company) {
-        this.company = company;
+    public void setCompany_id(Integer company_id) {
+        this.company_id = company_id;
     }
 }
