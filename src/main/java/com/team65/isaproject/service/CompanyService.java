@@ -36,7 +36,7 @@ public class CompanyService {
         return companyRepository.save(company);
     }
 
-    public List<Company> searchCompaniesByPrefix(String prefix) {
-        return companyRepository.findByCompanyNameStartingWithIgnoreCase(prefix);
+    public List<Company> searchCompaniesByNameAndAddress(String prefix, String address) {
+        return companyRepository.findByCompanyNameOrAddressContainingIgnoreCase(prefix, address);
     }
 }

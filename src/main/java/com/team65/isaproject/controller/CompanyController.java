@@ -46,10 +46,10 @@ public class CompanyController {
 
         return new ResponseEntity<>(new CompanyDTO(company), HttpStatus.OK);
     }
-
-    @GetMapping("/search/by-name")
-    public ResponseEntity<List<CompanyDTO>> searchCompaniesByPrefix(@RequestParam String prefix) {
-        List<Company> companies = companyService.searchCompaniesByPrefix(prefix);
+    
+    @GetMapping("/search")
+    public ResponseEntity<List<CompanyDTO>> searchCompaniesByNameAndAddress(@RequestParam String prefix, @RequestParam String address) {
+        List<Company> companies = companyService.searchCompaniesByNameAndAddress(prefix, address);
         List<CompanyDTO> companyDTOS = new ArrayList<>();
         for (Company company : companies) {
             CompanyDTO companyDTO = CompanyDTOMapper.fromCompanytoDTO(company);
