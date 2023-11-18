@@ -25,7 +25,9 @@ INSERT INTO public.Equipment (id, name, equipment_type, description, rating, pri
 VALUES
     (-1, 'Equipment1', 0, 'Description1', 4.2, 150.0, -1),  -- 0 odgovara ordinalnoj vrednosti za TYPE1
     (-2, 'Equipment2', 1, 'Description2', 3.9, 120.0, -2),  -- 1 odgovara ordinalnoj vrednosti za TYPE2
-    (-3, 'Equipment3', 2, 'Description3', 4.5, 180.0, -1);  -- 2 odgovara ordinalnoj vrednosti za TYPE3
+    (-3, 'Equipment3', 2, 'Description3', 4.5, 180.0, -1),  -- 2 odgovara ordinalnoj vrednosti za TYPE3
+    (-4, 'Equipment4', 3, 'Description4', 4.5, 180.0, -1),  --3
+    (-5, 'Equipment5', 4, 'Description5', 4.5, 180.0, -1);  --4
 
 
 -- INSERT za tabelu User (primer za listu korisnika vezanih za kompaniju)

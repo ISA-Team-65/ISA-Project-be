@@ -66,4 +66,22 @@ public class EquipmentController {
 
         return new ResponseEntity<>(equipmentDTOS, HttpStatus.OK);
     }
+
+    @GetMapping(value = "/allEquipments")
+    public ResponseEntity<List<EquipmentDTO>> getAll()
+    {
+        List<Equipment> equipments = equipmentService.findAll();
+
+        List<EquipmentDTO> equipmentDTOS = new ArrayList<>();
+
+        for(Equipment e : equipments){
+            equipmentDTOS.add(new EquipmentDTO(e));
+        }
+
+        if(equipmentDTOS.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(equipmentDTOS, HttpStatus.OK);
+    }
 }
