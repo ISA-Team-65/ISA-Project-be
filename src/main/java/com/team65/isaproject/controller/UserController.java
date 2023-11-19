@@ -57,6 +57,7 @@ public class UserController {
     }
 
     @PostMapping(consumes = "application/json")
+    @PreAuthorize("hasRole('SYSTEM_ADMIN')")
     public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO){
         //ovde bi isla validacija
         if(userDTO == null){

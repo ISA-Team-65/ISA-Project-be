@@ -11,6 +11,7 @@ import com.team65.isaproject.service.EquipmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ public class EquipmentController {
     private EquipmentDTOMapper equipmentDTOMapper;
 
     @PostMapping(consumes = "application/json")
+    @PreAuthorize("hasRole('SYSTEM_ADMIN')")
     public ResponseEntity<EquipmentDTO> createEquipment(@RequestBody EquipmentDTO equipmentDTO){
         //ovde bi isla validacija
         if(equipmentDTO == null){

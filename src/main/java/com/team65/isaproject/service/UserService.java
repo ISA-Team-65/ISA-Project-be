@@ -59,6 +59,7 @@ public class UserService implements UserDetailsService {
         u.setAddress(userRequest.getAddress());
         u.setPhoneNumber(userRequest.getPhoneNumber());
         u.setProfession(userRequest.getProfession());
+        u.setCompany_id(userRequest.getCompany_id());
 
         List<Role> roles = new ArrayList<Role>();
         switch (role) {
