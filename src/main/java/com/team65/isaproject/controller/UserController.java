@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/users", produces = MediaType.APPLICATION_JSON_VALUE)
 @CrossOrigin
 public class UserController {
 
@@ -31,13 +31,13 @@ public class UserController {
     // Za pristup ovoj metodi neophodno je da ulogovani korisnik ima ADMIN ulogu
     // Ukoliko nema, server ce vratiti gresku 403 Forbidden
     // Korisnik jeste autentifikovan, ali nije autorizovan da pristupi resursu
-    @GetMapping("/user/{userId}")
+    @GetMapping("/{userId}")
     @PreAuthorize("hasRole('SYSTEM_ADMIN')")
     public User loadById(@PathVariable Integer userId) {
         return this.userService.findById(userId);
     }
 
-    @GetMapping("/user/all")
+    @GetMapping("/all")
     @PreAuthorize("hasRole('SYSTEM_ADMIN')")
     public List<User> loadAll() {
         return this.userService.findAll();
