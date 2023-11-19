@@ -35,4 +35,8 @@ public class CompanyService {
     public Company save(Company company){
         return companyRepository.save(company);
     }
+
+    public List<Company> searchCompaniesByNameAndAddress(String prefix, String address) {
+        return companyRepository.findByCompanyNameOrAddressContainingIgnoreCase(prefix, address);
+    }
 }
