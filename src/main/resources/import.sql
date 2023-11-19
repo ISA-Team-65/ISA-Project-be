@@ -30,11 +30,33 @@ VALUES
     (-5, 'Equipment5', 4, 'Description5', 4.5, 180.0, -1);  --4
 
 
--- INSERT za tabelu User (primer za listu korisnika vezanih za kompaniju)
 
-INSERT INTO Userr (id, email, password, first_name, last_name, address, phone_number, profession, type, company_id)
+-- Lozinke su hesovane pomocu BCrypt algoritma https://www.dailycred.com/article/bcrypt-calculator
+-- Lozinka za oba user-a je 123
+-- INSERT za tabelu User (primer za listu korisnika vezanih za kompaniju)
+INSERT INTO Userr (id, address, email, enabled, first_name, last_name, last_password_reset_date, password, phone_number, profession, username, company_id)
 VALUES
-    (-1, 'peraperic@gmail.com', 'pera123', 'Pera', 'Peric', 'Melhiora Erdujheljija 2', '+38763245234', 'programmer', 0, -1),
-    (-2, 'peraperic@gmail.com', 'pera123', 'Pera', 'Peric', 'Melhiora Erdujheljija 2', '+38763245234', 'programmer', 0, -2),
-    (-3, 'peraperic@gmail.com', 'pera123', 'Pera', 'Peric', 'Melhiora Erdujheljija 2', '+38763245234', 'programmer', 0, -3);
+    (-1, 'Melhiora Erdujheljija 2', 'peraperic@gmail.com', true, 'Pera', 'Peric', '2017-10-01 21:58:58.508-07', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '+38763245234', 'programmer', 'peraperic', -1),
+    (-2, 'Melhiora Erdujheljija 2', 'peraperic@gmail.com', true, 'Pera', 'Peric', '2017-10-01 21:58:58.508-07', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '+38763245234', 'programmer', 'peraperic1', -1),
+    (-3, 'Melhiora Erdujheljija 2', 'peraperic@gmail.com', true, 'Pera', 'Peric', '2017-10-01 21:58:58.508-07', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '+38763245234', 'programmer', 'peraperic2', -1);
+
+INSERT INTO Role (id, name)
+VALUES
+    (-1, 'ROLE_USER'),
+    (-2, 'ROLE_COMPANY_ADMIN'),
+    (-3, 'ROLE_SYSTEM_ADMIN');
+
+-- INSERT INTO Role (id, name) VALUES (-1, 'ROLE_USER');
+-- INSERT INTO Role (id, name) VALUES (-2, 'ROLE_COMPANY_ADMIN');
+-- INSERT INTO Role (id, name) VALUES (-3, 'ROLE_SYSTEM_ADMIN');
+
+INSERT INTO user_role (user_id, role_id)
+VALUES
+    (-1, -1),
+    (-2, -2),
+    (-3, -3);
+
+-- INSERT INTO user_role (user_id, role_id) VALUES (-1, -1); -- registrovanom korisniku dodeljujemo rolu USER
+-- INSERT INTO user_role (user_id, role_id) VALUES (-2, -2); -- admin-u kompanije dodeljujemo rolu COMPANY_ADMIN
+-- INSERT INTO user_role (user_id, role_id) VALUES (-3, -3); -- admin-u sistema dodeljujemo rolu SYSTEM_ADMIN
 
