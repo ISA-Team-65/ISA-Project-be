@@ -1,7 +1,6 @@
 package com.team65.isaproject.dto;
 
 import com.team65.isaproject.model.user.User;
-import com.team65.isaproject.model.user.UserType;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.Column;
@@ -16,7 +15,6 @@ public class UserDTO {
     private String address;
     private String phoneNumber;
     private String profession;
-    private UserType type;
     private Integer company_id;
 
     public UserDTO() {
@@ -31,7 +29,6 @@ public class UserDTO {
         address = user.getAddress();
         phoneNumber = user.getPhoneNumber();
         profession = user.getProfession();
-        type = user.getType();
         company_id = user.getCompany_id();
     }
 
@@ -97,14 +94,6 @@ public class UserDTO {
 
     public void setProfession(String profession) {
         this.profession = profession;
-    }
-
-    public UserType getType() {
-        return type;
-    }
-
-    public void setType(UserType type) {
-        this.type = type;
     }
 
     public Integer getCompany_id() {

@@ -3,6 +3,7 @@ package com.team65.isaproject.model.equipment;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "Equipment")
 public class Equipment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

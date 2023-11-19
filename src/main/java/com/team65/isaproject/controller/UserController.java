@@ -1,29 +1,60 @@
 package com.team65.isaproject.controller;
 
-import com.team65.isaproject.dto.AppointmentDTO;
 import com.team65.isaproject.dto.UserDTO;
-import com.team65.isaproject.mapper.AppointmentDTOMapper;
 import com.team65.isaproject.mapper.UserDTOMapper;
-import com.team65.isaproject.model.appointment.Appointment;
 import com.team65.isaproject.model.user.User;
-import com.team65.isaproject.service.AppointmentService;
 import com.team65.isaproject.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
-@RequestMapping(value = "api/users")
+@RequestMapping(value = "/api/users", produces = MediaType.APPLICATION_JSON_VALUE)
+@CrossOrigin
 public class UserController {
+
     @Autowired
     private UserService userService;
 
     @Autowired
     private UserDTOMapper userDTOMapper;
+
+    // Za pristup ovoj metodi neophodno je da ulogovani korisnik ima ADMIN ulogu
+    // Ukoliko nema, server ce vratiti gresku 403 Forbidden
+    // Korisnik jeste autentifikovan, ali nije autorizovan da pristupi resursu
+    @GetMapping("/{userId}")
+    @PreAuthorize("hasRole('SYSTEM_ADMIN')")
+    public User loadById(@PathVariable Integer userId) {
+        return this.userService.findById(userId);
+    }
+
+    @GetMapping("/all")
+    @PreAuthorize("hasRole('SYSTEM_ADMIN')")
+    public List<User> loadAll() {
+        return this.userService.findAll();
+    }
+
+    @GetMapping("/whoami")
+    @PreAuthorize("hasRole('USER')")
+    public User user(Principal user) {
+        return this.userService.findByUsername(user.getName());
+    }
+
+    @GetMapping("/foo")
+    public Map<String, String> getFoo() {
+        Map<String, String> fooObj = new HashMap<>();
+        fooObj.put("foo", "bar");
+        return fooObj;
+    }
 
     @PostMapping(consumes = "application/json")
     public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO){
@@ -67,7 +98,6 @@ public class UserController {
         user.setLastName(userDTO.getLastName());
         user.setPhoneNumber(userDTO.getPhoneNumber());
         user.setProfession(userDTO.getProfession());
-        user.setType(userDTO.getType());
 
         user = userService.save(user);
         return new ResponseEntity<>(new UserDTO(user), HttpStatus.OK);
@@ -89,4 +119,5 @@ public class UserController {
 
         return new ResponseEntity<>(userDTOS, HttpStatus.OK);
     }
+
 }
