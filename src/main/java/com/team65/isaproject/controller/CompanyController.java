@@ -1,8 +1,10 @@
 package com.team65.isaproject.controller;
 
 import com.team65.isaproject.dto.CompanyDTO;
+import com.team65.isaproject.dto.UserDTO;
 import com.team65.isaproject.mapper.CompanyDTOMapper;
 import com.team65.isaproject.model.Company;
+import com.team65.isaproject.model.user.User;
 import com.team65.isaproject.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -41,6 +43,25 @@ public class CompanyController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
+        return new ResponseEntity<>(new CompanyDTO(company), HttpStatus.OK);
+    }
+
+    @PutMapping(consumes = "application/json")
+    public ResponseEntity<CompanyDTO> updateCompany(@RequestBody CompanyDTO companyDTO) {
+
+        Company company = companyService.findById(companyDTO.getId());
+//        user = userService.update(userDTOMapper.);
+
+        if (company == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        company.setAddress(companyDTO.getAddress());
+        company.setCompanyName(companyDTO.getCompanyName());
+        company.setDescription(companyDTO.getDescription());
+        company.setRating(companyDTO.getRating());
+
+        company = companyService.save(company);
         return new ResponseEntity<>(new CompanyDTO(company), HttpStatus.OK);
     }
 }

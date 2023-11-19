@@ -1,38 +1,34 @@
-package com.team65.isaproject.model;
+package com.team65.isaproject.dto;
 
-import javax.persistence.*;
+import com.team65.isaproject.model.equipment.Equipment;
+import com.team65.isaproject.model.equipment.EquipmentType;
 
-@Entity
-public class Equipment {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+public class EquipmentDTO {
+
     private Integer id;
-    @Column(name = "name")
     private String name;
-    @Column(name = "equipment_type")
     private EquipmentType type;
-    @Column(name = "description")
     private String description;
-    @Column(name = "rating")
     private double rating;
-    @Column(name = "price")
     private double price;
+    private Integer company_id;
 
-    @ManyToOne
-    @JoinColumn(name = "company_id")
-    private Company company;
-
-    public Equipment() {
+    public EquipmentDTO() {
     }
 
-    public Equipment(Integer id, String name, EquipmentType type, String description, double rating, double price, Company company) {
-        this.id = id;
-        this.name = name;
-        this.type = type;
-        this.description = description;
-        this.rating = rating;
-        this.price = price;
-        this.company = company;
+    public EquipmentDTO(Equipment equipment){
+        id = equipment.getId();
+        name = equipment.getName();
+        type = equipment.getType();
+        description = equipment.getDescription();
+        rating = equipment.getRating();
+        price = equipment.getPrice();
+        company_id = equipment.getCompany_id();
     }
 
     public Integer getId() {
@@ -83,12 +79,11 @@ public class Equipment {
         this.price = price;
     }
 
-    public Company getCompany() {
-        return company;
+    public Integer getCompany_id() {
+        return company_id;
     }
 
-    public void setCompany(Company company) {
-        this.company = company;
+    public void setCompany_id(Integer company_id) {
+        this.company_id = company_id;
     }
 }
-

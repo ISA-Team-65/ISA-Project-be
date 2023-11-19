@@ -1,10 +1,8 @@
 package com.team65.isaproject.model.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.team65.isaproject.model.Company;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Collection;
@@ -56,14 +54,13 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private List<Role> roles;
 
-    @ManyToOne
-    @JoinColumn(name = "company_id") // Dodato
-    private Company company;
+    @Column(name = "company_id") // Dodato
+    private Integer company_id;
 
     public User() {
     }
 
-    public User(Integer id, String email, String password, String firstName, String lastName, String address, String phoneNumber, String profession, Timestamp lastPasswordResetDate, Company company) {
+    public User(Integer id, String email, String password, String firstName, String lastName, String address, String phoneNumber, String profession, Timestamp lastPasswordResetDate, Integer company_id) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -73,7 +70,7 @@ public class User implements UserDetails {
         this.phoneNumber = phoneNumber;
         this.profession = profession;
         this.lastPasswordResetDate = lastPasswordResetDate;
-        this.company = company;
+        this.company_id = company_id;
     }
 
     public Integer getId() {
@@ -164,12 +161,12 @@ public class User implements UserDetails {
         this.lastPasswordResetDate = lastPasswordResetDate;
     }
 
-    public Company getCompany() {
-        return company;
+    public Integer getCompany_id() {
+        return company_id;
     }
 
-    public void setCompany(Company company) {
-        this.company = company;
+    public void setCompany_id(Integer company_id) {
+        this.company_id = company_id;
     }
 
     @Override

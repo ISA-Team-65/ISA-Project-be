@@ -1,39 +1,35 @@
-package com.team65.isaproject.model;
+package com.team65.isaproject.dto;
 
-import javax.persistence.*;
+import com.team65.isaproject.model.appointment.Appointment;
+import com.team65.isaproject.model.appointment.AppointmentStatus;
+
 import java.time.LocalDateTime;
 
-@Entity
-public class Appointment {
+public class AppointmentDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(name = "admin_name")
     private String adminName;
-    @Column(name = "admin_lastname")
     private String adminLastname;
-    @Column(name = "appointment_date_time")
     private LocalDateTime dateTime;
-    @Column(name = "duration")
     private double duration;
-    @Column(name = "status")
     private AppointmentStatus status;
-    @ManyToOne
-    @JoinColumn(name = "company_id") // Dodato
-    private Company company;
-    public Appointment() {
+    private Integer company_id;
+    private boolean isReserved;
+
+    public AppointmentDTO() {
     }
 
-    public Appointment(Integer id, String adminName, String adminLastname, LocalDateTime dateTime, double duration, AppointmentStatus status, Company company) {
-        this.id = id;
-        this.adminName = adminName;
-        this.adminLastname = adminLastname;
-        this.dateTime = dateTime;
-        this.duration = duration;
-        this.status = status;
-        this.company = company;
+    public AppointmentDTO(Appointment appointment){
+        id = appointment.getId();
+        adminName = appointment.getAdminName();
+        adminLastname = appointment.getAdminLastname();
+        dateTime = appointment.getDateTime();
+        duration = appointment.getDuration();
+        status = appointment.getStatus();
+        company_id = appointment.getCompany_id();
+        isReserved = appointment.isReserved();
     }
+
 
     public Integer getId() {
         return id;
@@ -83,11 +79,19 @@ public class Appointment {
         this.status = status;
     }
 
-    public Company getCompany() {
-        return company;
+    public Integer getCompany_id() {
+        return company_id;
     }
 
-    public void setCompany(Company company) {
-        this.company = company;
+    public void setCompany_id(Integer company_id) {
+        this.company_id = company_id;
+    }
+
+    public boolean isReserved() {
+        return isReserved;
+    }
+
+    public void setReserved(boolean reserved) {
+        isReserved = reserved;
     }
 }
