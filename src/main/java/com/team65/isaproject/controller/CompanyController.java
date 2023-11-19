@@ -46,7 +46,7 @@ public class CompanyController {
 
         return new ResponseEntity<>(new CompanyDTO(company), HttpStatus.OK);
     }
-    
+
     @GetMapping("/search")
     public ResponseEntity<List<CompanyDTO>> searchCompaniesByNameAndAddress(@RequestParam String prefix, @RequestParam String address) {
         List<Company> companies = companyService.searchCompaniesByNameAndAddress(prefix, address);
