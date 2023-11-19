@@ -49,6 +49,7 @@ public class EquipmentService {
     }
 
     public List<Equipment> findAllByName(String name) {
-        return equipmentRepository.findAllByName(name);
+
+        return equipmentRepository.findAllByNameContainingIgnoreCase(name);
     }
 }
