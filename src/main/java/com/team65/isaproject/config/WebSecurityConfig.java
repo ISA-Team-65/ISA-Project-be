@@ -76,7 +76,7 @@ public class WebSecurityConfig {
         http.exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint);
         http.authorizeRequests().antMatchers("/auth/**").permitAll()		// /auth/**
                 .antMatchers("/h2-console/**").permitAll()	// /h2-console/** ako se koristi H2 baza)
-                .antMatchers("/api/users/foo").permitAll()		// /api/foo
+                .antMatchers("/api/users/**").permitAll()		// /api/foo
                 .antMatchers("/api/companies/**").permitAll()
                 .antMatchers("/api/appointments/**").permitAll()
                 .antMatchers("/api/equipment/**").permitAll()
