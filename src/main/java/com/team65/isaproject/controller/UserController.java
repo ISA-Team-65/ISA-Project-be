@@ -64,7 +64,6 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    @PreAuthorize("hasAnyRole('USER', 'COMPANY_ADMIN', 'SYSTEM_ADMIN')")
     public User loadById(@PathVariable Integer userId) {
         return this.userService.findById(userId);
     }
@@ -108,7 +107,6 @@ public class UserController {
         return new ResponseEntity<>(userDTOS, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('USER')")
     @PutMapping(value = "/user", consumes = "application/json")
     public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDTO) {
 
