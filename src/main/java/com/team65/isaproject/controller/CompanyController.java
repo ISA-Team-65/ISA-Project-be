@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "api/companies")
 public class CompanyController {
@@ -22,9 +24,9 @@ public class CompanyController {
     private CompanyDTOMapper companyDTOMapper;
 
     @PostMapping(consumes = "application/json")
-    public ResponseEntity<CompanyDTO> createCompany(@RequestBody CompanyDTO companyDTO){
+    public ResponseEntity<CompanyDTO> createCompany(@RequestBody CompanyDTO companyDTO) {
         //ovde bi isla validacija
-        if(companyDTO == null){
+        if (companyDTO == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -34,12 +36,10 @@ public class CompanyController {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<CompanyDTO> getCompany(@PathVariable Integer id)
-    {
+    public ResponseEntity<CompanyDTO> getCompany(@PathVariable Integer id) {
         Company company = companyService.findById(id);
 
-        if (company == null)
-        {
+        if (company == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 

@@ -47,4 +47,8 @@ public class EquipmentService {
 
         return equipment;
     }
+
+    public List<Equipment> findAllByName(String name) {
+        return equipmentRepository.findAllByName(name);
+    }
 }

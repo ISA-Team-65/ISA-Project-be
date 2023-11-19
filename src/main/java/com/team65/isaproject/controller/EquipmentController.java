@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "api/equipment")
+@RequestMapping(path = "api/equipment")
 public class EquipmentController {
     @Autowired
     private EquipmentService equipmentService;
@@ -36,7 +36,6 @@ public class EquipmentController {
         equipment = equipmentService.save(equipment);
         return new ResponseEntity<>(new EquipmentDTO(equipment), HttpStatus.CREATED);
     }
-
     @GetMapping(value = "/{id}")
     public ResponseEntity<EquipmentDTO> getEquipment(@PathVariable Integer id)
     {
@@ -82,6 +81,24 @@ public class EquipmentController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
+        return new ResponseEntity<>(equipmentDTOS, HttpStatus.OK);
+    }
+
+    @GetMapping("/test/{name}")
+    public ResponseEntity<List<EquipmentDTO>> getAllByName(@PathVariable String name)
+    {
+        List<Equipment> equipments = equipmentService.findAllByName(name);
+
+        List<EquipmentDTO> equipmentDTOS = new ArrayList<>();
+
+        for(Equipment e : equipments)
+        {
+            equipmentDTOS.add(new EquipmentDTO(e));
+        }
+
+        if(equipmentDTOS.isEmpty()){
+            return new ResponseEntity<>(equipmentDTOS, HttpStatus.OK);
+        }
         return new ResponseEntity<>(equipmentDTOS, HttpStatus.OK);
     }
 }
