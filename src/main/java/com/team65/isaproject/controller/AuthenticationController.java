@@ -19,7 +19,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Properties;
 
 
 @RestController
@@ -69,6 +73,37 @@ public class AuthenticationController {
         }
 
         User user = this.userService.save(userRequest, role);
+
+//        final String username = "isaproject96@gmail.com";
+//        final String password = "isaproject123";
+//
+//        Properties props = new Properties();
+//        props.put("mail.smtp.auth", "true");
+//        props.put("mail.smtp.starttls.enable", "true");
+//        props.put("mail.smtp.host", "smtp.gmail.com");
+//        props.put("mail.smtp.port", "587");
+//
+//        Session session = Session.getInstance(props,
+//                new javax.mail.Authenticator() {
+//                    protected PasswordAuthentication getPasswordAuthentication() {
+//                        return new PasswordAuthentication(username, password);
+//                    }
+//                });
+//
+//        try {
+//            Message message = new MimeMessage(session);
+//            message.setFrom(new InternetAddress("isaproject96@gmail.com"));
+//            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse("isaproject96@example.com"));
+//            message.setSubject("Testing JavaMail");
+//            message.setText("Hello, this is a test email sent from Java!");
+//
+//            Transport.send(message);
+//
+//            System.out.println("Email sent successfully.");
+//
+//        } catch (MessagingException e) {
+//            throw new RuntimeException(e);
+//        }
 
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
