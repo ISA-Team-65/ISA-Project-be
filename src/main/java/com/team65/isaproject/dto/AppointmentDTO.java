@@ -15,6 +15,7 @@ public class AppointmentDTO {
     private AppointmentStatus status;
     private Integer company_id;
     private boolean isReserved;
+    private Integer user_id;
 
     public AppointmentDTO() {
     }
@@ -28,6 +29,7 @@ public class AppointmentDTO {
         status = appointment.getStatus();
         company_id = appointment.getCompany_id();
         isReserved = appointment.isReserved();
+        user_id = appointment.getUser_id();
     }
 
 
@@ -94,4 +96,13 @@ public class AppointmentDTO {
     public void setReserved(boolean reserved) {
         isReserved = reserved;
     }
+
+    public Integer getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(Integer user_id) {
+        this.user_id = user_id;
+    }
+
 }

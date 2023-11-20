@@ -32,6 +32,9 @@ public class AppointmentService {
             temp.setDuration(appointment.getDuration());
             temp.setReserved(appointment.isReserved());
             temp.setDateTime(appointment.getDateTime());
+            temp.setStatus(appointment.getStatus());
+            temp.setUser_id(appointment.getUser_id());
+            temp.setCompany_id(appointment.getCompany_id());
 
             return appointmentRepository.save(temp);
         }

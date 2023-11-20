@@ -7,6 +7,7 @@ import com.team65.isaproject.service.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -48,6 +49,7 @@ public class AppointmentController {
     }
 
     @GetMapping(value = "/byCompanyId/{id}")
+    @PreAuthorize("hasAnyRole('USER', 'COMPANY_ADMIN')")
     public ResponseEntity<List<AppointmentDTO>> getAllByCompanyId(@PathVariable Integer id){
         List<Appointment> appointments = appointmentService.getAllAppointmentsByCompanyId(id);
 
@@ -62,6 +64,28 @@ public class AppointmentController {
         }
 
         return new ResponseEntity<>(appointmentDTOS, HttpStatus.OK);
+    }
+
+    @PutMapping(consumes = "application/json")
+    @PreAuthorize("hasAnyRole('USER', 'COMPANY_ADMIN')")
+    public ResponseEntity<AppointmentDTO> updateAppointment(@RequestBody AppointmentDTO appointmentDTO){
+        Appointment appointment = appointmentService.findById(appointmentDTO.getId());
+
+        if(appointment == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        appointment.setAdminLastname(appointmentDTO.getAdminLastname());
+        appointment.setAdminName(appointmentDTO.getAdminName());
+        appointment.setDuration(appointmentDTO.getDuration());
+        appointment.setReserved(appointmentDTO.isReserved());
+        appointment.setDateTime(appointmentDTO.getDateTime());
+        appointment.setStatus(appointmentDTO.getStatus());
+        appointment.setUser_id(appointmentDTO.getUser_id());
+        appointment.setCompany_id(appointmentDTO.getCompany_id());
+
+        appointment = appointmentService.save(appointment);
+        return new ResponseEntity<>(new AppointmentDTO(appointment), HttpStatus.OK);
     }
 
 }

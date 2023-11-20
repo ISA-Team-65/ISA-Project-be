@@ -120,4 +120,18 @@ public class UserController {
         return new ResponseEntity<>(userDTOS, HttpStatus.OK);
     }
 
+    @GetMapping(value = "/getByUsername/{username}")
+    @PreAuthorize("hasAnyRole('USER', 'COMPANY_ADMIN', 'SYSTEM_ADMIN')")
+    public ResponseEntity<UserDTO> getUserByUsername(@PathVariable String username)
+    {
+        User user = userService.findByUsername(username);
+
+        if (user == null)
+        {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(new UserDTO(user), HttpStatus.OK);
+    }
+
 }

@@ -26,10 +26,13 @@ public class Appointment {
     @Column(name = "is_reserved")
     private boolean isReserved;
 
+    @Column(name = "user_id")
+    private Integer user_id;
+
     public Appointment() {
     }
 
-    public Appointment(Integer id, String adminName, String adminLastname, LocalDateTime dateTime, double duration, AppointmentStatus status, Integer company_id, boolean isReserved) {
+    public Appointment(Integer id, String adminName, String adminLastname, LocalDateTime dateTime, double duration, AppointmentStatus status, Integer company_id, boolean isReserved, Integer user_id) {
         this.id = id;
         this.adminName = adminName;
         this.adminLastname = adminLastname;
@@ -38,6 +41,7 @@ public class Appointment {
         this.status = status;
         this.company_id = company_id;
         this.isReserved = isReserved;
+        this.user_id = user_id;
     }
 
     public Integer getId() {
@@ -102,5 +106,13 @@ public class Appointment {
 
     public void setReserved(boolean reserved) {
         isReserved = reserved;
+    }
+
+    public Integer getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(Integer user_id) {
+        this.user_id = user_id;
     }
 }

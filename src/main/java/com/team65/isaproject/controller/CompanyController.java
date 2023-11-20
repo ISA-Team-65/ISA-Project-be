@@ -9,6 +9,7 @@ import com.team65.isaproject.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,6 +23,7 @@ public class CompanyController {
     private CompanyDTOMapper companyDTOMapper;
 
     @PostMapping(consumes = "application/json")
+    @PreAuthorize("hasRole('COMPANY_ADMIN')")
     public ResponseEntity<CompanyDTO> createCompany(@RequestBody CompanyDTO companyDTO){
         //ovde bi isla validacija
         if(companyDTO == null){
@@ -34,6 +36,7 @@ public class CompanyController {
     }
 
     @GetMapping(value = "/{id}")
+    @PreAuthorize("hasAnyRole('USER', 'COMPANY_ADMIN')")
     public ResponseEntity<CompanyDTO> getCompany(@PathVariable Integer id)
     {
         Company company = companyService.findById(id);
@@ -47,6 +50,7 @@ public class CompanyController {
     }
 
     @PutMapping(consumes = "application/json")
+    @PreAuthorize("hasRole('COMPANY_ADMIN')")
     public ResponseEntity<CompanyDTO> updateCompany(@RequestBody CompanyDTO companyDTO) {
 
         Company company = companyService.findById(companyDTO.getId());
@@ -64,4 +68,7 @@ public class CompanyController {
         company = companyService.save(company);
         return new ResponseEntity<>(new CompanyDTO(company), HttpStatus.OK);
     }
+
+
+
 }
