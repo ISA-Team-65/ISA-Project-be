@@ -31,11 +31,11 @@ public class UserController {
     // Za pristup ovoj metodi neophodno je da ulogovani korisnik ima ADMIN ulogu
     // Ukoliko nema, server ce vratiti gresku 403 Forbidden
     // Korisnik jeste autentifikovan, ali nije autorizovan da pristupi resursu
-    @GetMapping("/{userId}")
-    @PreAuthorize("hasRole('SYSTEM_ADMIN')")
-    public User loadById(@PathVariable Integer userId) {
-        return this.userService.findById(userId);
-    }
+//    @GetMapping("/{userId}")
+//    @PreAuthorize("hasRole('SYSTEM_ADMIN')")
+//    public User loadById(@PathVariable Integer userId) {
+//        return this.userService.findById(userId);
+//    }
 
     @GetMapping("/all")
     @PreAuthorize("hasRole('SYSTEM_ADMIN')")
@@ -57,6 +57,7 @@ public class UserController {
     }
 
     @PostMapping(consumes = "application/json")
+    @PreAuthorize("hasRole('SYSTEM_ADMIN')")
     public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO){
         //ovde bi isla validacija
         if(userDTO == null){
@@ -68,21 +69,13 @@ public class UserController {
         return new ResponseEntity<>(new UserDTO(user), HttpStatus.CREATED);
     }
 
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<UserDTO> getUser(@PathVariable Integer id)
-    {
-        User user = userService.findById(id);
-
-        if (user == null)
-        {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        return new ResponseEntity<>(new UserDTO(user), HttpStatus.OK);
+    @GetMapping("/{userId}")
+    public User loadById(@PathVariable Integer userId) {
+        return this.userService.findById(userId);
     }
 
     @PutMapping(consumes = "application/json")
-    public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<UserDTO> update(@RequestBody UserDTO userDTO) {
 
         User user = userService.findById(userDTO.getId());
 //        user = userService.update(userDTOMapper.);
@@ -134,4 +127,23 @@ public class UserController {
         return new ResponseEntity<>(new UserDTO(user), HttpStatus.OK);
     }
 
+    @PutMapping(value = "/user", consumes = "application/json")
+    public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDTO) {
+
+        User user = userService.findById(userDTO.getId());
+
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        user.setAddress(userDTO.getAddress());
+        user.setEmail(userDTO.getEmail());
+        user.setFirstName(userDTO.getFirstName());
+        user.setLastName(userDTO.getLastName());
+        user.setPhoneNumber(userDTO.getPhoneNumber());
+        user.setProfession(userDTO.getProfession());
+
+        user = userService.save(user);
+        return new ResponseEntity<>(new UserDTO(user), HttpStatus.OK);
+    }
 }

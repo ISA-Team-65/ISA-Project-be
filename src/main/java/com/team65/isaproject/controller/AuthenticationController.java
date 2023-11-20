@@ -11,17 +11,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Properties;
 
 
 @RestController
@@ -61,15 +63,47 @@ public class AuthenticationController {
     }
 
     // Endpoint za registraciju novog korisnika
-    @PostMapping("/signup")
-    public ResponseEntity<User> addUser(@RequestBody UserRequest userRequest, UriComponentsBuilder ucBuilder) {
+    @PostMapping("/signup/{role}")
+    //@PreAuthorize("hasRole('SYSTEM_ADMIN')")
+    public ResponseEntity<User> addUser(@RequestBody UserRequest userRequest, UriComponentsBuilder ucBuilder, @PathVariable Integer role) {
         User existUser = this.userService.findByUsername(userRequest.getUsername());
 
         if (existUser != null) {
             throw new ResourceConflictException(userRequest.getId(), "Username already exists");
         }
 
-        User user = this.userService.save(userRequest, 1);
+        User user = this.userService.save(userRequest, role);
+
+//        final String username = "isaproject96@gmail.com";
+//        final String password = "isaproject123";
+//
+//        Properties props = new Properties();
+//        props.put("mail.smtp.auth", "true");
+//        props.put("mail.smtp.starttls.enable", "true");
+//        props.put("mail.smtp.host", "smtp.gmail.com");
+//        props.put("mail.smtp.port", "587");
+//
+//        Session session = Session.getInstance(props,
+//                new javax.mail.Authenticator() {
+//                    protected PasswordAuthentication getPasswordAuthentication() {
+//                        return new PasswordAuthentication(username, password);
+//                    }
+//                });
+//
+//        try {
+//            Message message = new MimeMessage(session);
+//            message.setFrom(new InternetAddress("isaproject96@gmail.com"));
+//            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse("isaproject96@example.com"));
+//            message.setSubject("Testing JavaMail");
+//            message.setText("Hello, this is a test email sent from Java!");
+//
+//            Transport.send(message);
+//
+//            System.out.println("Email sent successfully.");
+//
+//        } catch (MessagingException e) {
+//            throw new RuntimeException(e);
+//        }
 
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }

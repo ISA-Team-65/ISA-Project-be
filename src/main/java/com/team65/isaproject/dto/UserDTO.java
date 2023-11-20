@@ -8,6 +8,7 @@ import javax.persistence.Column;
 @Component
 public class UserDTO {
     private Integer id;
+    private String username;
     private String email;
     private String password;
     private String firstName;
@@ -22,6 +23,7 @@ public class UserDTO {
 
     public UserDTO(User user){
         id = user.getId();
+        username = user.getUsername();
         email = user.getEmail();
         password = user.getPassword();
         firstName = user.getFirstName();
@@ -104,5 +106,11 @@ public class UserDTO {
         this.company_id = company_id;
     }
 
+    public String getUsername() {
+        return username;
+    }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
 }
