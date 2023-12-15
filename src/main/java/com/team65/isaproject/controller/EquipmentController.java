@@ -27,7 +27,7 @@ public class EquipmentController {
     private EquipmentDTOMapper equipmentDTOMapper;
 
     @PostMapping(consumes = "application/json")
-    @PreAuthorize("hasRole('SYSTEM_ADMIN')")
+    //@PreAuthorize("hasRole('SYSTEM_ADMIN')")
     public ResponseEntity<EquipmentDTO> createEquipment(@RequestBody EquipmentDTO equipmentDTO){
         //ovde bi isla validacija
         if(equipmentDTO == null){

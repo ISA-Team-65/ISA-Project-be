@@ -69,6 +69,9 @@ public class UserService implements UserDetailsService {
             case 2:
                 roles = roleService.findByName("ROLE_COMPANY_ADMIN");
                 break;
+            case 3:
+                roles = roleService.findByName("ROLE_SYSTEM_ADMIN");
+                break;
         }
 
         u.setRoles(roles);
