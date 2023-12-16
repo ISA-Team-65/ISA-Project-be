@@ -49,7 +49,7 @@ public class AppointmentController {
     }
 
     @GetMapping(value = "/byCompanyId/{id}")
-    @PreAuthorize("hasAnyRole('USER', 'COMPANY_ADMIN')")
+    //@PreAuthorize("hasAnyRole('USER', 'COMPANY_ADMIN')")
     public ResponseEntity<List<AppointmentDTO>> getAllByCompanyId(@PathVariable Integer id){
         List<Appointment> appointments = appointmentService.getAllAppointmentsByCompanyId(id);
 
