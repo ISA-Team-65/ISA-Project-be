@@ -15,9 +15,9 @@ VALUES
 -- INSERT za tabelu Appointment
 INSERT INTO Appointment (id, admin_name, admin_lastname, appointment_date_time, duration, status, company_id, is_reserved, user_id)
 VALUES
-    (-1, 'Admin1', 'AdminLastname1', '2023-12-21 10:00:00', 1.5, 0, -1, TRUE, -1),
-    (-2, 'Admin2', 'AdminLastname2', '2023-12-22 14:30:00', 2.0, 1, -1, FALSE, NULL),
-    (-3, 'Admin3', 'AdminLastname3', '2023-01-03 16:45:00', 1.8, 1, -3, FALSE, NULL);
+    (-1, 'Admin1', 'AdminLastname1', '2023-12-21 10:00:00', 20, 0, -1, TRUE, -1),
+    (-2, 'Admin2', 'AdminLastname2', '2023-12-22 14:30:00', 15, 1, -1, FALSE, NULL),
+    (-3, 'Admin3', 'AdminLastname3', '2023-01-03 16:45:00', 10, 1, -3, FALSE, NULL);
 
 -- INSERT za tabelu Equipment
 -- INSERT za tabelu Equipment
