@@ -52,7 +52,7 @@ public class EquipmentController {
     }
 
     @GetMapping(value = "/byCompanyId/{id}")
-    @PreAuthorize("hasAnyRole( 'USER', 'COMPANY_ADMIN')")
+    //@PreAuthorize("hasAnyRole( 'USER', 'COMPANY_ADMIN')")
     public ResponseEntity<List<EquipmentDTO>> getAllByCompanyId(@PathVariable Integer id){
         List<Equipment> equipment = equipmentService.getAllEquipmentByCompanyId(id);
 

@@ -21,11 +21,13 @@ public class Equipment {
 
     @Column(name = "company_id")
     private Integer company_id;
+    @Column(name = "appointment_id")
+    private Integer appointmentId;
 
     public Equipment() {
     }
 
-    public Equipment(Integer id, String name, EquipmentType type, String description, double rating, double price, Integer company_id) {
+    public Equipment(Integer id, String name, EquipmentType type, String description, double rating, double price, Integer company_id, Integer appointmentId) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -33,6 +35,7 @@ public class Equipment {
         this.rating = rating;
         this.price = price;
         this.company_id = company_id;
+        this.appointmentId = appointmentId;
     }
 
     public Integer getId() {
@@ -89,6 +92,14 @@ public class Equipment {
 
     public void setCompany_id(Integer company_id) {
         this.company_id = company_id;
+    }
+
+    public Integer getAppointmentId() {
+        return appointmentId;
+    }
+
+    public void setAppointmentId(Integer appointmentId) {
+        this.appointmentId = appointmentId;
     }
 }
 
