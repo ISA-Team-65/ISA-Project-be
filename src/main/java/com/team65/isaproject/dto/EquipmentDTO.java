@@ -17,6 +17,7 @@ public class EquipmentDTO {
     private double rating;
     private double price;
     private Integer company_id;
+    private Integer appointmentId;
 
     public EquipmentDTO() {
     }
@@ -29,6 +30,7 @@ public class EquipmentDTO {
         rating = equipment.getRating();
         price = equipment.getPrice();
         company_id = equipment.getCompany_id();
+        appointmentId = equipment.getAppointmentId();
     }
 
     public Integer getId() {
@@ -85,5 +87,13 @@ public class EquipmentDTO {
 
     public void setCompany_id(Integer company_id) {
         this.company_id = company_id;
+    }
+
+    public Integer getAppointmentId() {
+        return appointmentId;
+    }
+
+    public void setAppointmentId(Integer appointmentId) {
+        this.appointmentId = appointmentId;
     }
 }

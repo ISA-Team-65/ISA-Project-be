@@ -114,7 +114,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/getByUsername/{username}")
-    @PreAuthorize("hasAnyRole('USER', 'COMPANY_ADMIN', 'SYSTEM_ADMIN')")
+    //@PreAuthorize("hasAnyRole('USER', 'COMPANY_ADMIN', 'SYSTEM_ADMIN')")
     public ResponseEntity<UserDTO> getUserByUsername(@PathVariable String username)
     {
         User user = userService.findByUsername(username);
