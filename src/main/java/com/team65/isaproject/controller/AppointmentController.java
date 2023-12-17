@@ -30,9 +30,9 @@ public class AppointmentController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        Appointment appointment = mapper.MapToModel(appointmentDTO, Appointment.class);
+        Appointment appointment = mapper.mapToModel(appointmentDTO, Appointment.class);
         appointment = appointmentService.save(appointment);
-        return new ResponseEntity<>(mapper.MapToDto(appointment, AppointmentDTO.class), HttpStatus.CREATED);
+        return new ResponseEntity<>(mapper.mapToDto(appointment, AppointmentDTO.class), HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/{id}")
@@ -45,7 +45,7 @@ public class AppointmentController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(mapper.MapToDto(appointment, AppointmentDTO.class), HttpStatus.OK);
+        return new ResponseEntity<>(mapper.mapToDto(appointment, AppointmentDTO.class), HttpStatus.OK);
     }
 
     @GetMapping(value = "/byCompanyId/{id}")
@@ -56,7 +56,7 @@ public class AppointmentController {
         List<AppointmentDTO> appointmentDTOS = new ArrayList<>();
 
         for(Appointment a : appointments){
-            appointmentDTOS.add(mapper.MapToDto(a, AppointmentDTO.class));
+            appointmentDTOS.add(mapper.mapToDto(a, AppointmentDTO.class));
         }
 
         if(appointmentDTOS.isEmpty()){
@@ -85,6 +85,6 @@ public class AppointmentController {
         appointment.setCompanyId(appointmentDTO.getCompanyId());
 
         appointment = appointmentService.save(appointment);
-        return new ResponseEntity<>(mapper.MapToDto(appointment, AppointmentDTO.class), HttpStatus.OK);
+        return new ResponseEntity<>(mapper.mapToDto(appointment, AppointmentDTO.class), HttpStatus.OK);
     }
 }
