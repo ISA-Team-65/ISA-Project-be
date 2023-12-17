@@ -18,6 +18,6 @@ public class EquipmentDTO {
     private String description;
     private double rating;
     private double price;
-    private Integer company_id;
+    private Integer companyId;
     private Integer appointmentId;
 }
