@@ -21,4 +21,5 @@ public class UserDTO {
     private String phoneNumber;
     private String profession;
     private Integer companyId;
+    private String role;
 }

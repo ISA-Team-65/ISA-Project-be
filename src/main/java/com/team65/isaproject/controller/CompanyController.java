@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@CrossOrigin("http://localhost:3000")
 @RequestMapping(value = "api/companies")
 @RequiredArgsConstructor
 @Tag(name = "Company")
@@ -37,7 +38,7 @@ public class CompanyController {
     }
 
     @GetMapping(value = "/{id}")
-//    @PreAuthorize("hasAnyRole( 'SYSTEM_ADMIN', 'USER', 'COMPANY_ADMIN')")
+    @PreAuthorize("hasAnyRole( 'SYSTEM_ADMIN', 'USER', 'COMPANY_ADMIN')")
     public ResponseEntity<CompanyDTO> getCompany(@PathVariable Integer id)
     {
         Company company = companyService.findById(id);

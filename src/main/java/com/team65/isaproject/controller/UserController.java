@@ -15,13 +15,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@CrossOrigin("http://localhost:3000")
 @RequiredArgsConstructor
 @RequestMapping(value = "/api/users")
 @Tag(name = "User")
 public class UserController {
 
-    private UserService userService;
-    private Mapper<User, UserDTO> mapper;
+    private final UserService userService;
+    private final Mapper<User, UserDTO> mapper;
 
     @PostMapping(consumes = "application/json")
     @PreAuthorize("hasRole('SYSTEM_ADMIN')")
@@ -81,7 +82,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/getByUsername/{username}")
-//    @PreAuthorize("hasAnyRole('USER', 'COMPANY_ADMIN', 'SYSTEM_ADMIN')")
+    @PreAuthorize("hasAnyRole('USER', 'COMPANY_ADMIN', 'SYSTEM_ADMIN')")
     public ResponseEntity<UserDTO> getUserByUsername(@PathVariable String username)
     {
         User user = userService.findByUsername(username);

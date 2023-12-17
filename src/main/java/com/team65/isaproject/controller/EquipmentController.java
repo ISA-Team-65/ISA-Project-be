@@ -8,12 +8,14 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@CrossOrigin("http://localhost:3000")
 @RequiredArgsConstructor
 @RequestMapping(path = "api/equipment")
 @Tag(name = "Equipment")
@@ -23,7 +25,7 @@ public class EquipmentController {
     private final Mapper<Equipment, EquipmentDTO> mapper;
 
     @PostMapping(consumes = "application/json")
-    //@PreAuthorize("hasRole('SYSTEM_ADMIN')")
+    @PreAuthorize("hasRole('SYSTEM_ADMIN')")
     public ResponseEntity<EquipmentDTO> createEquipment(@RequestBody EquipmentDTO equipmentDTO){
         //ovde bi isla validacija
         if(equipmentDTO == null){
@@ -48,7 +50,7 @@ public class EquipmentController {
     }
 
     @GetMapping(value = "/byCompanyId/{id}")
-    //@PreAuthorize("hasAnyRole( 'USER', 'COMPANY_ADMIN')")
+    @PreAuthorize("hasAnyRole( 'USER', 'COMPANY_ADMIN')")
     public ResponseEntity<List<EquipmentDTO>> getAllByCompanyId(@PathVariable Integer id){
         List<Equipment> equipment = equipmentService.getAllEquipmentByCompanyId(id);
 
