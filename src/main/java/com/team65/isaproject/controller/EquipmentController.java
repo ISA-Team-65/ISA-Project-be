@@ -1,30 +1,26 @@
 package com.team65.isaproject.controller;
 
-import com.team65.isaproject.dto.AppointmentDTO;
 import com.team65.isaproject.dto.EquipmentDTO;
-import com.team65.isaproject.mapper.AppointmentDTOMapper;
-import com.team65.isaproject.mapper.EquipmentDTOMapper;
-import com.team65.isaproject.model.appointment.Appointment;
+import com.team65.isaproject.mapper.Mapper;
 import com.team65.isaproject.model.equipment.Equipment;
-import com.team65.isaproject.service.AppointmentService;
 import com.team65.isaproject.service.EquipmentService;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(path = "api/equipment")
+@Tag(name = "Equipment")
 public class EquipmentController {
-    @Autowired
-    private EquipmentService equipmentService;
 
-    @Autowired
-    private EquipmentDTOMapper equipmentDTOMapper;
+    private final EquipmentService equipmentService;
+    private final Mapper<Equipment, EquipmentDTO> mapper;
 
     @PostMapping(consumes = "application/json")
     //@PreAuthorize("hasRole('SYSTEM_ADMIN')")
@@ -34,9 +30,9 @@ public class EquipmentController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        Equipment equipment = EquipmentDTOMapper.fromDTOtoEquipment(equipmentDTO);
+        Equipment equipment = mapper.MapToModel(equipmentDTO, Equipment.class);
         equipment = equipmentService.save(equipment);
-        return new ResponseEntity<>(new EquipmentDTO(equipment), HttpStatus.CREATED);
+        return new ResponseEntity<>(mapper.MapToDto(equipment, EquipmentDTO.class), HttpStatus.CREATED);
     }
     @GetMapping(value = "/{id}")
     public ResponseEntity<EquipmentDTO> getEquipment(@PathVariable Integer id)
@@ -48,7 +44,7 @@ public class EquipmentController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(new EquipmentDTO(equipment), HttpStatus.OK);
+        return new ResponseEntity<>(mapper.MapToDto(equipment, EquipmentDTO.class), HttpStatus.OK);
     }
 
     @GetMapping(value = "/byCompanyId/{id}")
@@ -59,7 +55,7 @@ public class EquipmentController {
         List<EquipmentDTO> equipmentDTOS = new ArrayList<>();
 
         for(Equipment e : equipment){
-            equipmentDTOS.add(new EquipmentDTO(e));
+            equipmentDTOS.add(mapper.MapToDto(e, EquipmentDTO.class));
         }
 
         if(equipmentDTOS.isEmpty()){
@@ -77,7 +73,7 @@ public class EquipmentController {
         List<EquipmentDTO> equipmentDTOS = new ArrayList<>();
 
         for(Equipment e : equipments){
-            equipmentDTOS.add(new EquipmentDTO(e));
+            equipmentDTOS.add(mapper.MapToDto(e, EquipmentDTO.class));
         }
 
         if(equipmentDTOS.isEmpty()){
@@ -96,7 +92,7 @@ public class EquipmentController {
 
         for(Equipment e : equipments)
         {
-            equipmentDTOS.add(new EquipmentDTO(e));
+            equipmentDTOS.add(mapper.MapToDto(e, EquipmentDTO.class));
         }
 
         if(equipmentDTOS.isEmpty()){

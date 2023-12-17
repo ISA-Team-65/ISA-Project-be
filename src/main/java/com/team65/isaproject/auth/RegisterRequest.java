@@ -1,4 +1,4 @@
-package com.team65.isaproject.dto;
+package com.team65.isaproject.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,16 +7,15 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class UserDTO {
+@NoArgsConstructor
+public class RegisterRequest {
 
-    private Integer id;
     private String username;
-    private String email;
     private String password;
-    private String firstName;
-    private String lastName;
+    private String firstname;
+    private String lastname;
+    private String email;
     private String address;
     private String phoneNumber;
     private String profession;

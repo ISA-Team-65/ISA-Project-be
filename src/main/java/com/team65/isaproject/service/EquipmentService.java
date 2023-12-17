@@ -1,19 +1,18 @@
 package com.team65.isaproject.service;
 
-import com.team65.isaproject.model.appointment.Appointment;
 import com.team65.isaproject.model.equipment.Equipment;
 import com.team65.isaproject.repository.EquipmentRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class EquipmentService {
 
-    @Autowired
-    private EquipmentRepository equipmentRepository;
+    private final EquipmentRepository equipmentRepository;
 
     public List<Equipment> findAll(){
         return equipmentRepository.findAll();
@@ -40,7 +39,7 @@ public class EquipmentService {
         ArrayList<Equipment> equipment = new ArrayList<>();
 
         for(Equipment e : findAll()){
-            if(e.getCompany_id().equals(id)){
+            if(e.getCompanyId().equals(id)){
                 equipment.add(e);
             }
         }
@@ -56,5 +55,4 @@ public class EquipmentService {
     public void delete(Integer id){
         equipmentRepository.deleteById(id);
     }
-
 }

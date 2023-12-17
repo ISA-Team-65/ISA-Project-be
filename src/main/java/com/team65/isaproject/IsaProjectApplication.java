@@ -3,40 +3,50 @@ package com.team65.isaproject;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Bean;
-//import springfox.documentation.swagger2.annotations.EnableSwagger2;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
+import org.springframework.context.event.EventListener;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+
+import java.awt.*;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 @SpringBootApplication
-//@EnableSwagger2
-public class IsaProjectApplication {
+@EnableMethodSecurity
+public class IsaprojectApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(IsaprojectApplication.class, args);
+	}
+
+	@EventListener({ApplicationReadyEvent.class})
+	void applicationReadyEvent() {
+		System.out.println("Application started ... launching browser now");
+		browse("http://localhost:8080/swagger-ui/index.html");
+	}
+
+	public static void browse(String url) {
+		if(Desktop.isDesktopSupported()){
+			Desktop desktop = Desktop.getDesktop();
+			try {
+				desktop.browse(new URI(url));
+			} catch (IOException | URISyntaxException e) {
+				e.printStackTrace();
+			}
+		}else{
+			Runtime runtime = Runtime.getRuntime();
+			try {
+				runtime.exec("rundll32 url.dll,FileProtocolHandler " + url);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
 	@Bean
 	public ModelMapper getModelMapper() {
 		return new ModelMapper();
 	}
-	
-	public static void main(String[] args) {
-		SpringApplication.run(IsaProjectApplication.class, args);
-	}
-
-	@Configuration
-	public static class CorsConfig {
-
-		@Bean
-		public CorsFilter corsFilter() {
-			UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-			CorsConfiguration config = new CorsConfiguration();
-			config.setAllowCredentials(true);
-			config.addAllowedOrigin("http://localhost:3000"); // Replace with your React app's origin
-			config.addAllowedHeader("*");
-			config.addAllowedMethod("*");
-			source.registerCorsConfiguration("/**", config);
-			return new CorsFilter(source);
-		}
-	}
-
 }

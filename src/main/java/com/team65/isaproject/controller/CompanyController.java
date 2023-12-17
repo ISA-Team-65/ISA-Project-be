@@ -1,30 +1,27 @@
 package com.team65.isaproject.controller;
 
 import com.team65.isaproject.dto.CompanyDTO;
-import com.team65.isaproject.dto.UserDTO;
-import com.team65.isaproject.mapper.CompanyDTOMapper;
+import com.team65.isaproject.mapper.Mapper;
 import com.team65.isaproject.model.Company;
-import com.team65.isaproject.model.user.User;
 import com.team65.isaproject.service.CompanyService;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
 
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequestMapping(value = "api/companies")
+@RequiredArgsConstructor
+@Tag(name = "Company")
 public class CompanyController {
 
-    @Autowired
-    private CompanyService companyService;
-
-    @Autowired
-    private CompanyDTOMapper companyDTOMapper;
+    private final CompanyService companyService;
+    private final Mapper<Company, CompanyDTO> mapper;
 
     @PostMapping(consumes = "application/json")
     @PreAuthorize("hasRole('SYSTEM_ADMIN')")
@@ -34,9 +31,9 @@ public class CompanyController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        Company company = CompanyDTOMapper.fromDTOtoCompany(companyDTO);
+        Company company = mapper.MapToModel(companyDTO, Company.class);
         company = companyService.save(company);
-        return new ResponseEntity<>(new CompanyDTO(company), HttpStatus.CREATED);
+        return new ResponseEntity<>(mapper.MapToDto(company, CompanyDTO.class), HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/{id}")
@@ -50,7 +47,7 @@ public class CompanyController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(new CompanyDTO(company), HttpStatus.OK);
+        return new ResponseEntity<>(mapper.MapToDto(company, CompanyDTO.class), HttpStatus.OK);
     }
 
     @PutMapping(consumes = "application/json")
@@ -70,7 +67,7 @@ public class CompanyController {
         company.setRating(companyDTO.getRating());
 
         company = companyService.save(company);
-        return new ResponseEntity<>(new CompanyDTO(company), HttpStatus.OK);
+        return new ResponseEntity<>(mapper.MapToDto(company, CompanyDTO.class), HttpStatus.OK);
     }
 
     @GetMapping("/search")
@@ -78,7 +75,7 @@ public class CompanyController {
         List<Company> companies = companyService.searchCompaniesByNameAndAddress(prefix, address);
         List<CompanyDTO> companyDTOS = new ArrayList<>();
         for (Company company : companies) {
-            CompanyDTO companyDTO = CompanyDTOMapper.fromCompanytoDTO(company);
+            CompanyDTO companyDTO = mapper.MapToDto(company, CompanyDTO.class);
             companyDTOS.add(companyDTO);
         }
         return new ResponseEntity<>(companyDTOS, HttpStatus.OK);

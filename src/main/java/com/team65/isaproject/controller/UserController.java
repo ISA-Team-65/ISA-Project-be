@@ -1,60 +1,27 @@
 package com.team65.isaproject.controller;
 
 import com.team65.isaproject.dto.UserDTO;
-import com.team65.isaproject.mapper.UserDTOMapper;
+import com.team65.isaproject.mapper.Mapper;
 import com.team65.isaproject.model.user.User;
 import com.team65.isaproject.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
-@RequestMapping(value = "/api/users", produces = MediaType.APPLICATION_JSON_VALUE)
-@CrossOrigin
+@RequiredArgsConstructor
+@RequestMapping(value = "/api/users")
+@Tag(name = "User")
 public class UserController {
 
-    @Autowired
     private UserService userService;
-
-    @Autowired
-    private UserDTOMapper userDTOMapper;
-
-    // Za pristup ovoj metodi neophodno je da ulogovani korisnik ima ADMIN ulogu
-    // Ukoliko nema, server ce vratiti gresku 403 Forbidden
-    // Korisnik jeste autentifikovan, ali nije autorizovan da pristupi resursu
-//    @GetMapping("/{userId}")
-//    @PreAuthorize("hasRole('SYSTEM_ADMIN')")
-//    public User loadById(@PathVariable Integer userId) {
-//        return this.userService.findById(userId);
-//    }
-
-    @GetMapping("/all")
-    @PreAuthorize("hasRole('SYSTEM_ADMIN')")
-    public List<User> loadAll() {
-        return this.userService.findAll();
-    }
-
-    @GetMapping("/whoami")
-    @PreAuthorize("hasRole('USER')")
-    public User user(Principal user) {
-        return this.userService.findByUsername(user.getName());
-    }
-
-    @GetMapping("/foo")
-    public Map<String, String> getFoo() {
-        Map<String, String> fooObj = new HashMap<>();
-        fooObj.put("foo", "bar");
-        return fooObj;
-    }
+    private Mapper<User, UserDTO> mapper;
 
     @PostMapping(consumes = "application/json")
     @PreAuthorize("hasRole('SYSTEM_ADMIN')")
@@ -64,9 +31,9 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        User user = UserDTOMapper.fromDTOtoUser(userDTO);
+        User user = mapper.MapToModel(userDTO, User.class);
         user = userService.save(user);
-        return new ResponseEntity<>(new UserDTO(user), HttpStatus.CREATED);
+        return new ResponseEntity<>(mapper.MapToDto(user, UserDTO.class), HttpStatus.CREATED);
     }
 
     @GetMapping("/{userId}")
@@ -93,7 +60,7 @@ public class UserController {
         user.setProfession(userDTO.getProfession());
 
         user = userService.save(user);
-        return new ResponseEntity<>(new UserDTO(user), HttpStatus.OK);
+        return new ResponseEntity<>(mapper.MapToDto(user, UserDTO.class), HttpStatus.OK);
     }
 
     @GetMapping(value = "/byCompanyId/{id}")
@@ -103,7 +70,7 @@ public class UserController {
         List<UserDTO> userDTOS = new ArrayList<>();
 
         for(User u : users){
-            userDTOS.add(new UserDTO(u));
+            userDTOS.add(mapper.MapToDto(u, UserDTO.class));
         }
 
         if(userDTOS.isEmpty()){
@@ -124,7 +91,7 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(new UserDTO(user), HttpStatus.OK);
+        return new ResponseEntity<>(mapper.MapToDto(user, UserDTO.class), HttpStatus.OK);
     }
 
     @PutMapping(value = "/user", consumes = "application/json")
@@ -144,6 +111,6 @@ public class UserController {
         user.setProfession(userDTO.getProfession());
 
         user = userService.save(user);
-        return new ResponseEntity<>(new UserDTO(user), HttpStatus.OK);
+        return new ResponseEntity<>(mapper.MapToDto(user, UserDTO.class), HttpStatus.OK);
     }
 }

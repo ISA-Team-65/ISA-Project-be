@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface EquipmentRepository extends JpaRepository<Equipment, Integer> {
+
     @Query("SELECT e FROM Equipment e WHERE LOWER(e.name) LIKE LOWER(CONCAT('%', :name, '%'))")
     public List<Equipment> findAllByNameContainingIgnoreCase(@Param("name") String name);
 }

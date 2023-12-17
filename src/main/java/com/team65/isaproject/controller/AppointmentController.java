@@ -1,27 +1,26 @@
 package com.team65.isaproject.controller;
 
 import com.team65.isaproject.dto.AppointmentDTO;
-import com.team65.isaproject.mapper.AppointmentDTOMapper;
+import com.team65.isaproject.mapper.Mapper;
 import com.team65.isaproject.model.appointment.Appointment;
 import com.team65.isaproject.service.AppointmentService;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(value = "api/appointments")
+@Tag(name = "Appointment")
 public class AppointmentController {
 
-    @Autowired
-    private AppointmentService appointmentService;
-
-    @Autowired
-    private AppointmentDTOMapper appointmentDTOMapper;
+    private final AppointmentService appointmentService;
+    private final Mapper<Appointment, AppointmentDTO> mapper;
 
     @PostMapping(consumes = "application/json")
     public ResponseEntity<AppointmentDTO> createAppointment(@RequestBody AppointmentDTO appointmentDTO){
@@ -30,9 +29,9 @@ public class AppointmentController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        Appointment appointment = AppointmentDTOMapper.fromDTOtoAppointment(appointmentDTO);
+        Appointment appointment = mapper.MapToModel(appointmentDTO, Appointment.class);
         appointment = appointmentService.save(appointment);
-        return new ResponseEntity<>(new AppointmentDTO(appointment), HttpStatus.CREATED);
+        return new ResponseEntity<>(mapper.MapToDto(appointment, AppointmentDTO.class), HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/{id}")
@@ -45,7 +44,7 @@ public class AppointmentController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(new AppointmentDTO(appointment), HttpStatus.OK);
+        return new ResponseEntity<>(mapper.MapToDto(appointment, AppointmentDTO.class), HttpStatus.OK);
     }
 
     @GetMapping(value = "/byCompanyId/{id}")
@@ -56,7 +55,7 @@ public class AppointmentController {
         List<AppointmentDTO> appointmentDTOS = new ArrayList<>();
 
         for(Appointment a : appointments){
-            appointmentDTOS.add(new AppointmentDTO(a));
+            appointmentDTOS.add(mapper.MapToDto(a, AppointmentDTO.class));
         }
 
         if(appointmentDTOS.isEmpty()){
@@ -81,11 +80,10 @@ public class AppointmentController {
         appointment.setReserved(appointmentDTO.isReserved());
         appointment.setDateTime(appointmentDTO.getDateTime());
         appointment.setStatus(appointmentDTO.getStatus());
-        appointment.setUser_id(appointmentDTO.getUser_id());
-        appointment.setCompany_id(appointmentDTO.getCompany_id());
+        appointment.setUserId(appointmentDTO.getUserId());
+        appointment.setCompanyId(appointmentDTO.getCompanyId());
 
         appointment = appointmentService.save(appointment);
-        return new ResponseEntity<>(new AppointmentDTO(appointment), HttpStatus.OK);
+        return new ResponseEntity<>(mapper.MapToDto(appointment, AppointmentDTO.class), HttpStatus.OK);
     }
-
 }

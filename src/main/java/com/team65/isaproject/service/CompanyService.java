@@ -2,26 +2,23 @@ package com.team65.isaproject.service;
 
 import com.team65.isaproject.model.Company;
 import com.team65.isaproject.repository.CompanyRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class CompanyService {
 
-    @Autowired
-    private CompanyRepository companyRepository;
-//    Injektuje se automatski =D
-//    public CompanyService(CompanyRepository companyRepository) {
-//        this.companyRepository = companyRepository;
-//    }
+    private final CompanyRepository companyRepository;
+
     public List<Company> findAll(){
         return companyRepository.findAll();
     }
 
     public Company findById(Integer id){
-       return companyRepository.findById(id).orElseGet(null);
+        return companyRepository.findById(id).orElseGet(null);
     }
 
     public Company update(Company company){

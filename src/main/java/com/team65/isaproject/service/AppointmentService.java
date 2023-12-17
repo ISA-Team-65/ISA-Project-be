@@ -2,6 +2,7 @@ package com.team65.isaproject.service;
 
 import com.team65.isaproject.model.appointment.Appointment;
 import com.team65.isaproject.repository.AppointmentRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,11 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class AppointmentService {
 
-    @Autowired
-    private AppointmentRepository appointmentRepository;
-
+    private final AppointmentRepository appointmentRepository;
 
     public List<Appointment> findAll(){
         return appointmentRepository.findAll();
@@ -33,8 +33,8 @@ public class AppointmentService {
             temp.setReserved(appointment.isReserved());
             temp.setDateTime(appointment.getDateTime());
             temp.setStatus(appointment.getStatus());
-            temp.setUser_id(appointment.getUser_id());
-            temp.setCompany_id(appointment.getCompany_id());
+            temp.setUserId(appointment.getUserId());
+            temp.setCompanyId(appointment.getCompanyId());
 
             return appointmentRepository.save(temp);
         }
@@ -50,7 +50,7 @@ public class AppointmentService {
         ArrayList<Appointment> appointments = new ArrayList<>();
 
         for(Appointment a : findAll()){
-            if(a.getCompany_id().equals(id)){
+            if(a.getCompanyId().equals(id)){
                 appointments.add(a);
             }
         }
