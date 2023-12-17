@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -49,7 +50,7 @@ public class AppointmentController {
     }
 
     @GetMapping(value = "/byCompanyId/{id}")
-    //@PreAuthorize("hasAnyRole('USER', 'COMPANY_ADMIN')")
+    @PreAuthorize("hasAnyRole('USER', 'COMPANY_ADMIN')")
     public ResponseEntity<List<AppointmentDTO>> getAllByCompanyId(@PathVariable Integer id){
         List<Appointment> appointments = appointmentService.getAllAppointmentsByCompanyId(id);
 

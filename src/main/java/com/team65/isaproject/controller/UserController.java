@@ -38,6 +38,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
+    @PreAuthorize("hasAnyRole('COMPANY_ADMIN', 'USER', 'SYSTEM_ADMIN')")
     public User loadById(@PathVariable Integer userId) {
         return this.userService.findById(userId);
     }
