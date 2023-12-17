@@ -1,5 +1,7 @@
 package com.team65.isaproject.service;
 
+import com.team65.isaproject.dto.EquipmentDTO;
+import com.team65.isaproject.mapper.Mapper;
 import com.team65.isaproject.model.equipment.Equipment;
 import com.team65.isaproject.repository.EquipmentRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,25 +15,27 @@ import java.util.List;
 public class EquipmentService {
 
     private final EquipmentRepository equipmentRepository;
+    private final Mapper<Equipment, EquipmentDTO> mapper;
 
     public List<Equipment> findAll(){
         return equipmentRepository.findAll();
     }
 
-    public Equipment findById(Integer id){
-        return equipmentRepository.findById(id).orElse(null);
+    public EquipmentDTO findById(Integer id){
+        return mapper.MapToDto(equipmentRepository.findById(id).orElse(null), EquipmentDTO.class);
     }
 
-    public Equipment update(Equipment equipment){
-        Equipment temp = findById(equipment.getId());
-        if(temp != null){
-            return equipmentRepository.save(temp);
-        }
-        return null;
-    }
+//    public Equipment update(Equipment equipment){
+//        Equipment temp = findById(equipment.getId());
+//        if(temp != null){
+//            return equipmentRepository.save(temp);
+//        }
+//        return null;
+//    }
 
-    public Equipment save(Equipment equipment){
-        return equipmentRepository.save(equipment);
+    public EquipmentDTO save(EquipmentDTO equipmentDto){
+
+        return mapper.MapToDto(equipmentRepository.save(mapper.MapToModel(equipmentDto, Equipment.class)), EquipmentDTO.class);
     }
 
     public List<Equipment> getAllEquipmentByCompanyId(Integer id){
