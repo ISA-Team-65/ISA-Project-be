@@ -36,9 +36,9 @@ VALUES
 -- INSERT za tabelu User (primer za listu korisnika vezanih za kompaniju)
 INSERT INTO Userr (id, address, email, enabled, first_name, last_name, last_password_reset_date, password, phone_number, profession, username, company_id)
 VALUES
-    (-1, 'Melhiora Erdujheljija 2', 'peraperic@gmail.com', true, 'Pera', 'Peric', '2017-10-01 21:58:58.508-07', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '+38763245234', 'programmer', 'peraperic', -1),
+    (-1, 'Melhiora Erdujheljija 2', 'peraperic@gmail.com', true, 'Pera', 'Peric', '2017-10-01 21:58:58.508-07', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '+38763245234', 'programmer', 'peraperic', null),
     (-2, 'Melhiora Erdujheljija 2', 'peraperic@gmail.com', true, 'Pera', 'Peric', '2017-10-01 21:58:58.508-07', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '+38763245234', 'programmer', 'peraperic1', -1),
-    (-3, 'Melhiora Erdujheljija 2', 'peraperic@gmail.com', true, 'Pera', 'Peric', '2017-10-01 21:58:58.508-07', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '+38763245234', 'programmer', 'peraperic2', -1);
+    (-3, 'Melhiora Erdujheljija 2', 'peraperic@gmail.com', true, 'Pera', 'Peric', '2017-10-01 21:58:58.508-07', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '+38763245234', 'programmer', 'peraperic2', null);
 
 INSERT INTO Role (id, name)
 VALUES

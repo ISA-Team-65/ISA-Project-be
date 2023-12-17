@@ -114,8 +114,10 @@ public class UserService implements UserDetailsService {
         ArrayList<User> users = new ArrayList<>();
 
         for(User u : findAll()){
-            if(u.getCompany_id().equals(id)){
-                users.add(u);
+            if(u.getCompany_id() != null){
+                if(u.getCompany_id().equals(id)){
+                    users.add(u);
+                }
             }
         }
 

@@ -52,4 +52,9 @@ public class EquipmentService {
 
         return equipmentRepository.findAllByNameContainingIgnoreCase(name);
     }
+
+    public void delete(Integer id){
+        equipmentRepository.deleteById(id);
+    }
+
 }

@@ -54,7 +54,7 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private List<Role> roles;
 
-    @Column(name = "company_id") // Dodato
+    @Column(name = "company_id", nullable = true) // Dodato
     private Integer company_id;
 
     public User() {

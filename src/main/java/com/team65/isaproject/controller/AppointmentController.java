@@ -67,7 +67,7 @@ public class AppointmentController {
     }
 
     @PutMapping(consumes = "application/json")
-    @PreAuthorize("hasAnyRole('USER', 'COMPANY_ADMIN')")
+//    @PreAuthorize("hasAnyRole('USER', 'COMPANY_ADMIN')")
     public ResponseEntity<AppointmentDTO> updateAppointment(@RequestBody AppointmentDTO appointmentDTO){
         Appointment appointment = appointmentService.findById(appointmentDTO.getId());
 
