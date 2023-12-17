@@ -15,19 +15,19 @@ VALUES
 -- INSERT za tabelu Appointment
 INSERT INTO Appointment (id, admin_name, admin_lastname, appointment_date_time, duration, status, company_id, is_reserved, user_id)
 VALUES
-    (-1, 'Admin1', 'AdminLastname1', '2023-12-21 10:00:00', 1.5, 0, -1, TRUE, -1),
-    (-2, 'Admin2', 'AdminLastname2', '2023-12-22 14:30:00', 2.0, 1, -1, FALSE, NULL),
-    (-3, 'Admin3', 'AdminLastname3', '2023-01-03 16:45:00', 1.8, 1, -3, FALSE, NULL);
+    (-1, 'Admin1', 'AdminLastname1', '2023-12-21 10:00:00', 20, 0, -1, TRUE, -1),
+    (-2, 'Admin2', 'AdminLastname2', '2023-12-22 14:30:00', 15, 1, -1, FALSE, NULL),
+    (-3, 'Admin3', 'AdminLastname3', '2023-01-03 16:45:00', 10, 1, -3, FALSE, NULL);
 
 -- INSERT za tabelu Equipment
 -- INSERT za tabelu Equipment
-INSERT INTO public.Equipment (id, name, equipment_type, description, rating, price, company_id)
+INSERT INTO public.Equipment (id, name, equipment_type, description, rating, price, company_id, appointment_id)
 VALUES
-    (-1, 'Equipment1', 0, 'Description1', 4.2, 150.0, -1),  -- 0 odgovara ordinalnoj vrednosti za TYPE1
-    (-2, 'Equipment2', 1, 'Description2', 3.9, 120.0, -2),  -- 1 odgovara ordinalnoj vrednosti za TYPE2
-    (-3, 'Equipment3', 2, 'Description3', 4.5, 180.0, -1),  -- 2 odgovara ordinalnoj vrednosti za TYPE3
-    (-4, 'Equipment4', 3, 'Description4', 4.5, 180.0, -1),  --3
-    (-5, 'Equipment5', 4, 'Description5', 4.5, 180.0, -1);  --4
+    (-1, 'Equipment1', 0, 'Description1', 4.2, 150.0, -1, NULL),  -- 0 odgovara ordinalnoj vrednosti za TYPE1
+    (-2, 'Equipment2', 1, 'Description2', 3.9, 120.0, -2, NULL),  -- 1 odgovara ordinalnoj vrednosti za TYPE2
+    (-3, 'Equipment3', 2, 'Description3', 4.5, 180.0, -1, NULL),  -- 2 odgovara ordinalnoj vrednosti za TYPE3
+    (-4, 'Equipment4', 3, 'Description4', 4.5, 180.0, -1, NULL),  --3
+    (-5, 'Equipment5', 4, 'Description5', 4.5, 180.0, -1, NULL);  --4
 
 
 
