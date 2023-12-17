@@ -33,7 +33,7 @@ public class AuthenticationController {
     public ResponseEntity<AuthenticationResponse> registerUser(
             @RequestBody RegisterRequest request
     ) {
-        var result = service.register(request, false);
+        var result = service.register(request, 0);
         return result.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
@@ -51,7 +51,25 @@ public class AuthenticationController {
     public ResponseEntity<AuthenticationResponse> registerAdmin(
             @RequestBody RegisterRequest request
     ) {
-        var result = service.register(request, true);
+        var result = service.register(request, 1);
+        return result.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
+    }
+
+    @Operation(summary = "Register new system admin")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Registered",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = AuthenticationResponse.class)) }),
+            @ApiResponse(responseCode = "400", description = "Email or username already exist",
+                    content = @Content),
+            @ApiResponse(responseCode = "403", description = "Unauthorized",
+                    content = @Content) })
+    @PostMapping(value = "/registerSystemAdmin", consumes = "application/json")
+    @PreAuthorize("hasRole('SYSTEM_ADMIN')")
+    public ResponseEntity<AuthenticationResponse> registerSystemAdmin(
+            @RequestBody RegisterRequest request
+    ) {
+        var result = service.register(request, 2);
         return result.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
     }
 

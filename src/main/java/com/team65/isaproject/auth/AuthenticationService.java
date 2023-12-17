@@ -20,7 +20,8 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public Optional<AuthenticationResponse> register(RegisterRequest request, boolean isCompanyAdmin) {
+    public Optional<AuthenticationResponse> register(RegisterRequest request, int userRole) {
+
         var user = User.builder()
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
@@ -31,8 +32,8 @@ public class AuthenticationService {
                 .phoneNumber(request.getPhoneNumber())
                 .profession(request.getProfession())
                 .companyId(request.getCompanyId())
-                .role(isCompanyAdmin ? Role.COMPANY_ADMIN : Role.USER)
-                .enabled(isCompanyAdmin)
+                .role(getUserRole(userRole))
+                .enabled(userRole != 0)
                 .lastPasswordResetDate(null)
                 .build();
         var usernameOrEmailExists = (
@@ -64,6 +65,17 @@ public class AuthenticationService {
         }
         catch (Exception e) {
             return Optional.empty();
+        }
+    }
+
+    private Role getUserRole(int userRole) {
+        switch (userRole) {
+            case 1:
+                return Role.COMPANY_ADMIN;
+            case 2:
+                return Role.SYSTEM_ADMIN;
+            default:
+                return Role.USER;
         }
     }
 }
