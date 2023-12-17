@@ -25,28 +25,28 @@ public class EquipmentController {
     private final Mapper<Equipment, EquipmentDTO> mapper;
 
     @PostMapping(consumes = "application/json")
-    @PreAuthorize("hasRole('SYSTEM_ADMIN')")
+    @PreAuthorize("hasAnyRole('SYSTEM_ADMIN', 'COMPANY_ADMIN')")
     public ResponseEntity<EquipmentDTO> createEquipment(@RequestBody EquipmentDTO equipmentDTO){
         //ovde bi isla validacija
         if(equipmentDTO == null){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        Equipment equipment = mapper.MapToModel(equipmentDTO, Equipment.class);
-        equipment = equipmentService.save(equipment);
-        return new ResponseEntity<>(mapper.MapToDto(equipment, EquipmentDTO.class), HttpStatus.CREATED);
+//        Equipment equipment = mapper.MapToModel(equipmentDTO, Equipment.class);
+        equipmentDTO = equipmentService.save(equipmentDTO);
+        return new ResponseEntity<>(equipmentDTO, HttpStatus.CREATED);
     }
     @GetMapping(value = "/{id}")
     public ResponseEntity<EquipmentDTO> getEquipment(@PathVariable Integer id)
     {
-        Equipment equipment = equipmentService.findById(id);
+        EquipmentDTO equipmentDTO = equipmentService.findById(id);
 
-        if (equipment == null)
+        if (equipmentDTO == null)
         {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(mapper.MapToDto(equipment, EquipmentDTO.class), HttpStatus.OK);
+        return new ResponseEntity<>(equipmentDTO, HttpStatus.OK);
     }
 
     @GetMapping(value = "/byCompanyId/{id}")
@@ -106,5 +106,25 @@ public class EquipmentController {
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Integer id){
         equipmentService.delete(id);
+    }
+
+    @PutMapping(consumes = "application/json")
+    @PreAuthorize("hasRole('COMPANY_ADMIN')")
+    public ResponseEntity<EquipmentDTO> updateEquipment(@RequestBody EquipmentDTO equipmentDTO){
+        EquipmentDTO updatedEquipmentDto = equipmentService.findById(equipmentDTO.getId());
+
+        if(updatedEquipmentDto == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        updatedEquipmentDto.setName(equipmentDTO.getName());
+        updatedEquipmentDto.setType(equipmentDTO.getType());
+        updatedEquipmentDto.setDescription(equipmentDTO.getDescription());
+        updatedEquipmentDto.setRating(equipmentDTO.getRating());
+        updatedEquipmentDto.setPrice(equipmentDTO.getPrice());
+
+
+        updatedEquipmentDto = equipmentService.save(updatedEquipmentDto);
+        return new ResponseEntity<>( updatedEquipmentDto, HttpStatus.OK);
     }
 }
