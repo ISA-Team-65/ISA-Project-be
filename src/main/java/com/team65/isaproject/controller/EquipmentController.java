@@ -57,7 +57,7 @@ public class EquipmentController {
         List<EquipmentDTO> equipmentDTOS = new ArrayList<>();
 
         for(Equipment e : equipment){
-            equipmentDTOS.add(mapper.MapToDto(e, EquipmentDTO.class));
+            equipmentDTOS.add(mapper.mapToDto(e, EquipmentDTO.class));
         }
 
         if(equipmentDTOS.isEmpty()){
@@ -75,7 +75,7 @@ public class EquipmentController {
         List<EquipmentDTO> equipmentDTOS = new ArrayList<>();
 
         for(Equipment e : equipments){
-            equipmentDTOS.add(mapper.MapToDto(e, EquipmentDTO.class));
+            equipmentDTOS.add(mapper.mapToDto(e, EquipmentDTO.class));
         }
 
         if(equipmentDTOS.isEmpty()){
@@ -94,7 +94,7 @@ public class EquipmentController {
 
         for(Equipment e : equipments)
         {
-            equipmentDTOS.add(mapper.MapToDto(e, EquipmentDTO.class));
+            equipmentDTOS.add(mapper.mapToDto(e, EquipmentDTO.class));
         }
 
         if(equipmentDTOS.isEmpty()){
@@ -123,6 +123,17 @@ public class EquipmentController {
         updatedEquipmentDto.setRating(equipmentDTO.getRating());
         updatedEquipmentDto.setPrice(equipmentDTO.getPrice());
 
+
+        updatedEquipmentDto = equipmentService.save(updatedEquipmentDto);
+        return new ResponseEntity<>( updatedEquipmentDto, HttpStatus.OK);
+    }
+
+    @PutMapping(consumes = "application/json", value = "/addToAppointment")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<EquipmentDTO> addToAppointment(@RequestBody EquipmentDTO equipmentDTO){
+        EquipmentDTO updatedEquipmentDto = equipmentService.findById(equipmentDTO.getId());
+
+        updatedEquipmentDto.setAppointmentId(equipmentDTO.getAppointmentId());
 
         updatedEquipmentDto = equipmentService.save(updatedEquipmentDto);
         return new ResponseEntity<>( updatedEquipmentDto, HttpStatus.OK);

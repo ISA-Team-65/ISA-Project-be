@@ -28,5 +28,5 @@ public class Appointment {
     private AppointmentStatus status;
     private Integer companyId;
     private boolean isReserved;
-    private Integer UserId;
+    private Integer userId;
 }

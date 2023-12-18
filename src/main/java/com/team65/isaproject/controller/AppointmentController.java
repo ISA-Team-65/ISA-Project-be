@@ -25,15 +25,10 @@ public class AppointmentController {
     private final Mapper<Appointment, AppointmentDTO> mapper;
 
     @PostMapping(consumes = "application/json")
-    public ResponseEntity<AppointmentDTO> createAppointment(@RequestBody AppointmentDTO appointmentDTO){
-        //ovde bi isla validacija
-        if(appointmentDTO == null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+    @PreAuthorize("hasAnyRole('USER', 'COMPANY_ADMIN')")
+    public ResponseEntity<AppointmentDTO> createAppointment(@RequestBody AppointmentDTO appointmentDTO) {
 
-        Appointment appointment = mapper.MapToModel(appointmentDTO, Appointment.class);
-        appointment = appointmentService.save(appointment);
-        return new ResponseEntity<>(mapper.MapToDto(appointment, AppointmentDTO.class), HttpStatus.CREATED);
+        return appointmentService.create(appointmentDTO).map(ResponseEntity::ok).orElse(ResponseEntity.badRequest().build());
     }
 
     @GetMapping(value = "/{id}")
@@ -46,7 +41,7 @@ public class AppointmentController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(mapper.MapToDto(appointment, AppointmentDTO.class), HttpStatus.OK);
+        return new ResponseEntity<>(mapper.mapToDto(appointment, AppointmentDTO.class), HttpStatus.OK);
     }
 
     @GetMapping(value = "/byCompanyId/{id}")
@@ -57,7 +52,7 @@ public class AppointmentController {
         List<AppointmentDTO> appointmentDTOS = new ArrayList<>();
 
         for(Appointment a : appointments){
-            appointmentDTOS.add(mapper.MapToDto(a, AppointmentDTO.class));
+            appointmentDTOS.add(mapper.mapToDto(a, AppointmentDTO.class));
         }
 
         if(appointmentDTOS.isEmpty()){
@@ -68,24 +63,9 @@ public class AppointmentController {
     }
 
     @PutMapping(consumes = "application/json")
-//    @PreAuthorize("hasAnyRole('USER', 'COMPANY_ADMIN')")
+    @PreAuthorize("hasAnyRole('USER', 'COMPANY_ADMIN')")
     public ResponseEntity<AppointmentDTO> updateAppointment(@RequestBody AppointmentDTO appointmentDTO){
-        Appointment appointment = appointmentService.findById(appointmentDTO.getId());
-
-        if(appointment == null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
-        appointment.setAdminLastname(appointmentDTO.getAdminLastname());
-        appointment.setAdminName(appointmentDTO.getAdminName());
-        appointment.setDuration(appointmentDTO.getDuration());
-        appointment.setReserved(appointmentDTO.isReserved());
-        appointment.setDateTime(appointmentDTO.getDateTime());
-        appointment.setStatus(appointmentDTO.getStatus());
-        appointment.setUserId(appointmentDTO.getUserId());
-        appointment.setCompanyId(appointmentDTO.getCompanyId());
-
-        appointment = appointmentService.save(appointment);
-        return new ResponseEntity<>(mapper.MapToDto(appointment, AppointmentDTO.class), HttpStatus.OK);
+        var appointment = appointmentService.update(appointmentDTO);
+        return new ResponseEntity<>(appointment, HttpStatus.OK);
     }
 }

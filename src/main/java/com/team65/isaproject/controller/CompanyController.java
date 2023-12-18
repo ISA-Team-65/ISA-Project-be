@@ -32,9 +32,9 @@ public class CompanyController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        Company company = mapper.MapToModel(companyDTO, Company.class);
+        Company company = mapper.mapToModel(companyDTO, Company.class);
         company = companyService.save(company);
-        return new ResponseEntity<>(mapper.MapToDto(company, CompanyDTO.class), HttpStatus.CREATED);
+        return new ResponseEntity<>(mapper.mapToDto(company, CompanyDTO.class), HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/{id}")
@@ -48,7 +48,7 @@ public class CompanyController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(mapper.MapToDto(company, CompanyDTO.class), HttpStatus.OK);
+        return new ResponseEntity<>(mapper.mapToDto(company, CompanyDTO.class), HttpStatus.OK);
     }
 
     @PutMapping(consumes = "application/json")
@@ -68,7 +68,7 @@ public class CompanyController {
         company.setRating(companyDTO.getRating());
 
         company = companyService.save(company);
-        return new ResponseEntity<>(mapper.MapToDto(company, CompanyDTO.class), HttpStatus.OK);
+        return new ResponseEntity<>(mapper.mapToDto(company, CompanyDTO.class), HttpStatus.OK);
     }
 
     @GetMapping("/search")
@@ -76,7 +76,7 @@ public class CompanyController {
         List<Company> companies = companyService.searchCompaniesByNameAndAddress(prefix, address);
         List<CompanyDTO> companyDTOS = new ArrayList<>();
         for (Company company : companies) {
-            CompanyDTO companyDTO = mapper.MapToDto(company, CompanyDTO.class);
+            CompanyDTO companyDTO = mapper.mapToDto(company, CompanyDTO.class);
             companyDTOS.add(companyDTO);
         }
         return new ResponseEntity<>(companyDTOS, HttpStatus.OK);

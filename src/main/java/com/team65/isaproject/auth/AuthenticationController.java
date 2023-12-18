@@ -1,5 +1,6 @@
 package com.team65.isaproject.auth;
 
+import com.team65.isaproject.dto.UserDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

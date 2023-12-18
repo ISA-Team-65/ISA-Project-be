@@ -1,5 +1,8 @@
 package com.team65.isaproject.service;
 
+import com.team65.isaproject.dto.UserDTO;
+import com.team65.isaproject.mapper.Mapper;
+import com.team65.isaproject.model.user.Role;
 import com.team65.isaproject.model.user.User;
 import com.team65.isaproject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -9,12 +12,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository repository;
+    private final Mapper<User, UserDTO> mapper;
 
 
     public User update(User user) {
@@ -58,5 +63,17 @@ public class UserService {
 
     public User findByUsername(String username) throws UsernameNotFoundException {
         return repository.findByUsername(username).orElseGet(null);
+    }
+
+    public Optional<UserDTO> activateUserAccount(int id) {
+        try {
+            var user = repository.findById(id).orElseThrow();
+            if (user.getRole() != Role.USER) throw new Exception();
+            user.setEnabled(true);
+            repository.save(user);
+            return Optional.ofNullable(mapper.mapToDto(user, UserDTO.class));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
     }
 }
