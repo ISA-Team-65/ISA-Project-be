@@ -49,6 +49,31 @@ public class AuthenticationService {
                 .build());
     }
 
+    public Optional<AuthenticationResponse> changePassword (AuthenticationRequest request, int userRole) {
+        var usernameOrEmailExists = (
+                        repository.findByUsername(request.getUsername()).isPresent());
+        if (!usernameOrEmailExists) {
+            return Optional.empty();
+        }
+
+        Optional<User> existingUser = repository.findByUsername(request.getUsername());
+
+        User user = existingUser.get();
+
+        // Update the password and any other fields if needed
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        // Update other fields as needed...
+
+        // Save the updated user
+        repository.save(user);
+
+        // Generate and return the JWT token
+        var jwtToken = jwtService.generateToken(user);
+        return Optional.ofNullable(AuthenticationResponse.builder()
+                .token(jwtToken)
+                .build());
+    }
+
     public Optional<AuthenticationResponse> authenticate(AuthenticationRequest request) {
         try {
             authenticationManager.authenticate(

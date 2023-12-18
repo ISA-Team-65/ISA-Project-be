@@ -115,4 +115,27 @@ public class UserController {
         user = userService.save(user);
         return new ResponseEntity<>(mapper.MapToDto(user, UserDTO.class), HttpStatus.OK);
     }
+
+    @PutMapping(value = "/userPassword", consumes = "application/json")
+    public ResponseEntity<UserDTO> updateUserPassword(@RequestBody UserDTO userDTO) {
+
+        User user = userService.findById(userDTO.getId());
+
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        user.setPassword(userDTO.getPassword());
+
+        user = userService.save(user);
+        return new ResponseEntity<>(mapper.MapToDto(user, UserDTO.class), HttpStatus.OK);
+    }
+
+    @GetMapping("/checkLogging/{username}")
+    @PreAuthorize("hasAnyRole('COMPANY_ADMIN', 'USER', 'SYSTEM_ADMIN')")
+    public User isUserFirstTimeLogging(@PathVariable String username) {
+        User user = userService.findByUsername(username);
+
+        return user;
+    }
 }

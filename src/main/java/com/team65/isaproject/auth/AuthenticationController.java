@@ -85,4 +85,23 @@ public class AuthenticationController {
         var result = service.authenticate(request);
         return result.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+    @Operation(summary = "Change password system admin password")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "ChangedPassword",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = AuthenticationResponse.class)) }),
+            @ApiResponse(responseCode = "400", description = "username doesnt exist",
+                    content = @Content),
+            @ApiResponse(responseCode = "403", description = "Unauthorized",
+                    content = @Content) })
+    @PostMapping(value = "/changePassword", consumes = "application/json")
+    @PreAuthorize("hasAnyRole('COMPANY_ADMIN', 'SYSTEM_ADMIN', 'USER')")
+    public ResponseEntity<AuthenticationResponse> changePasswordSystemAdmin(
+            @RequestBody AuthenticationRequest request
+    ) {
+        var result = service.changePassword(request, 2);
+        return result.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
+    }
+
 }
