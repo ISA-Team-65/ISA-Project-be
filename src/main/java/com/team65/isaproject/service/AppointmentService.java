@@ -44,22 +44,13 @@ public class AppointmentService {
         return appointmentRepository.findById(id).orElse(null);
     }
 
-    public Appointment update(Appointment appointment){
-        Appointment temp = findById(appointment.getId());
-        if(temp != null){
+    public AppointmentDTO update(AppointmentDTO appointmentDto){
+        var appointment = mapper.mapToModel(appointmentDto, Appointment.class);
+        var temp = appointmentRepository.save(appointment);
 
-            temp.setAdminLastname(appointment.getAdminLastname());
-            temp.setAdminName(appointment.getAdminName());
-            temp.setDuration(appointment.getDuration());
-            temp.setReserved(appointment.isReserved());
-            temp.setDateTime(appointment.getDateTime());
-            temp.setStatus(appointment.getStatus());
-            temp.setUserId(appointment.getUserId());
-            temp.setCompanyId(appointment.getCompanyId());
+        sendEmail(userRepository.findById(appointment.getUserId()).orElseThrow().getEmail(), temp);
 
-            return appointmentRepository.save(temp);
-        }
-        return null;
+        return mapper.mapToDto(temp, AppointmentDTO.class);
     }
 
     public Appointment save(Appointment appointment){

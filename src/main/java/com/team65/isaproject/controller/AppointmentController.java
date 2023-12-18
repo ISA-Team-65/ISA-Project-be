@@ -63,24 +63,9 @@ public class AppointmentController {
     }
 
     @PutMapping(consumes = "application/json")
-//    @PreAuthorize("hasAnyRole('USER', 'COMPANY_ADMIN')")
+    @PreAuthorize("hasAnyRole('USER', 'COMPANY_ADMIN')")
     public ResponseEntity<AppointmentDTO> updateAppointment(@RequestBody AppointmentDTO appointmentDTO){
-        Appointment appointment = appointmentService.findById(appointmentDTO.getId());
-
-        if(appointment == null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
-        appointment.setAdminLastname(appointmentDTO.getAdminLastname());
-        appointment.setAdminName(appointmentDTO.getAdminName());
-        appointment.setDuration(appointmentDTO.getDuration());
-        appointment.setReserved(appointmentDTO.isReserved());
-        appointment.setDateTime(appointmentDTO.getDateTime());
-        appointment.setStatus(appointmentDTO.getStatus());
-        appointment.setUserId(appointmentDTO.getUserId());
-        appointment.setCompanyId(appointmentDTO.getCompanyId());
-
-        appointment = appointmentService.save(appointment);
-        return new ResponseEntity<>(mapper.mapToDto(appointment, AppointmentDTO.class), HttpStatus.OK);
+        var appointment = appointmentService.update(appointmentDTO);
+        return new ResponseEntity<>(appointment, HttpStatus.OK);
     }
 }
