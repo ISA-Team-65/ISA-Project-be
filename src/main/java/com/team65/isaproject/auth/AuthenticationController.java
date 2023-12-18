@@ -1,5 +1,6 @@
 package com.team65.isaproject.auth;
 
+import com.team65.isaproject.dto.UserDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -12,9 +13,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin("http://localhost:3000")
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
-@CrossOrigin("http://localhost:3000")
 @Tag(name = "Authorization", description = "Log In and Register")
 public class AuthenticationController {
 
@@ -85,4 +86,23 @@ public class AuthenticationController {
         var result = service.authenticate(request);
         return result.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+    @Operation(summary = "Change password system admin password")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "ChangedPassword",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = AuthenticationResponse.class)) }),
+            @ApiResponse(responseCode = "400", description = "username doesnt exist",
+                    content = @Content),
+            @ApiResponse(responseCode = "403", description = "Unauthorized",
+                    content = @Content) })
+    @PostMapping(value = "/changePassword", consumes = "application/json")
+    @PreAuthorize("hasAnyRole('COMPANY_ADMIN', 'SYSTEM_ADMIN', 'USER')")
+    public ResponseEntity<AuthenticationResponse> changePasswordSystemAdmin(
+            @RequestBody AuthenticationRequest request
+    ) {
+        var result = service.changePassword(request, 2);
+        return result.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
+    }
+
 }
