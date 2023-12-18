@@ -22,7 +22,7 @@ public class EquipmentService {
     }
 
     public EquipmentDTO findById(Integer id){
-        return mapper.MapToDto(equipmentRepository.findById(id).orElse(null), EquipmentDTO.class);
+        return mapper.mapToDto(equipmentRepository.findById(id).orElse(null), EquipmentDTO.class);
     }
 
 //    public Equipment update(Equipment equipment){
@@ -35,7 +35,7 @@ public class EquipmentService {
 
     public EquipmentDTO save(EquipmentDTO equipmentDto){
 
-        return mapper.MapToDto(equipmentRepository.save(mapper.MapToModel(equipmentDto, Equipment.class)), EquipmentDTO.class);
+        return mapper.mapToDto(equipmentRepository.save(mapper.mapToModel(equipmentDto, Equipment.class)), EquipmentDTO.class);
     }
 
     public List<Equipment> getAllEquipmentByCompanyId(Integer id){

@@ -57,7 +57,7 @@ public class EquipmentController {
         List<EquipmentDTO> equipmentDTOS = new ArrayList<>();
 
         for(Equipment e : equipment){
-            equipmentDTOS.add(mapper.MapToDto(e, EquipmentDTO.class));
+            equipmentDTOS.add(mapper.mapToDto(e, EquipmentDTO.class));
         }
 
         if(equipmentDTOS.isEmpty()){
@@ -75,7 +75,7 @@ public class EquipmentController {
         List<EquipmentDTO> equipmentDTOS = new ArrayList<>();
 
         for(Equipment e : equipments){
-            equipmentDTOS.add(mapper.MapToDto(e, EquipmentDTO.class));
+            equipmentDTOS.add(mapper.mapToDto(e, EquipmentDTO.class));
         }
 
         if(equipmentDTOS.isEmpty()){
@@ -94,7 +94,7 @@ public class EquipmentController {
 
         for(Equipment e : equipments)
         {
-            equipmentDTOS.add(mapper.MapToDto(e, EquipmentDTO.class));
+            equipmentDTOS.add(mapper.mapToDto(e, EquipmentDTO.class));
         }
 
         if(equipmentDTOS.isEmpty()){

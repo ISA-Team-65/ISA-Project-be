@@ -1,11 +1,18 @@
 package com.team65.isaproject.controller;
 
+import com.team65.isaproject.auth.AuthenticationResponse;
 import com.team65.isaproject.dto.UserDTO;
 import com.team65.isaproject.mapper.Mapper;
 import com.team65.isaproject.model.user.User;
 import com.team65.isaproject.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,9 +39,9 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        User user = mapper.MapToModel(userDTO, User.class);
+        User user = mapper.mapToModel(userDTO, User.class);
         user = userService.save(user);
-        return new ResponseEntity<>(mapper.MapToDto(user, UserDTO.class), HttpStatus.CREATED);
+        return new ResponseEntity<>(mapper.mapToDto(user, UserDTO.class), HttpStatus.CREATED);
     }
 
     @GetMapping("/{userId}")
@@ -61,7 +68,7 @@ public class UserController {
         user.setProfession(userDTO.getProfession());
 
         user = userService.save(user);
-        return new ResponseEntity<>(mapper.MapToDto(user, UserDTO.class), HttpStatus.OK);
+        return new ResponseEntity<>(mapper.mapToDto(user, UserDTO.class), HttpStatus.OK);
     }
 
     @GetMapping(value = "/byCompanyId/{id}")
@@ -71,7 +78,7 @@ public class UserController {
         List<UserDTO> userDTOS = new ArrayList<>();
 
         for(User u : users){
-            userDTOS.add(mapper.MapToDto(u, UserDTO.class));
+            userDTOS.add(mapper.mapToDto(u, UserDTO.class));
         }
 
         if(userDTOS.isEmpty()){
@@ -92,7 +99,7 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(mapper.MapToDto(user, UserDTO.class), HttpStatus.OK);
+        return new ResponseEntity<>(mapper.mapToDto(user, UserDTO.class), HttpStatus.OK);
     }
 
     @PutMapping(value = "/user", consumes = "application/json")
@@ -112,6 +119,22 @@ public class UserController {
         user.setProfession(userDTO.getProfession());
 
         user = userService.save(user);
-        return new ResponseEntity<>(mapper.MapToDto(user, UserDTO.class), HttpStatus.OK);
+        return new ResponseEntity<>(mapper.mapToDto(user, UserDTO.class), HttpStatus.OK);
+    }
+
+    @Operation(summary = "Activate user account")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Activated",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = AuthenticationResponse.class)) }),
+            @ApiResponse(responseCode = "404", description = "Not found",
+                    content = @Content) })
+    @PutMapping(value = "/activate")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<UserDTO> activateUser(
+            @RequestParam Integer userId
+    ) {
+        var result = userService.activateUserAccount(userId);
+        return result.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

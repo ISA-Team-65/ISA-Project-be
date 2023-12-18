@@ -10,11 +10,11 @@ public class Mapper<TModel, TDto> {
 
     private final ModelMapper modelMapper;
 
-    public TModel MapToModel(TDto dto, Class<TModel> modelClass) {
+    public TModel mapToModel(TDto dto, Class<TModel> modelClass) {
         return modelMapper.map(dto, modelClass);
     }
 
-    public TDto MapToDto(TModel model, Class<TDto> dtoClass) {
+    public TDto mapToDto(TModel model, Class<TDto> dtoClass) {
         return modelMapper.map(model, dtoClass);
     }
 }
