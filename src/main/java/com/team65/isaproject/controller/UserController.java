@@ -151,7 +151,7 @@ public class UserController {
         user.setPassword(userDTO.getPassword());
 
         user = userService.save(user);
-        return new ResponseEntity<>(mapper.MapToDto(user, UserDTO.class), HttpStatus.OK);
+        return new ResponseEntity<>(mapper.mapToDto(user, UserDTO.class), HttpStatus.OK);
     }
 
     @GetMapping("/checkLogging/{username}")
