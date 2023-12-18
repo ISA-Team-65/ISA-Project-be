@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -24,15 +25,10 @@ public class AppointmentController {
     private final Mapper<Appointment, AppointmentDTO> mapper;
 
     @PostMapping(consumes = "application/json")
-    public ResponseEntity<AppointmentDTO> createAppointment(@RequestBody AppointmentDTO appointmentDTO){
-        //ovde bi isla validacija
-        if(appointmentDTO == null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+    @PreAuthorize("hasAnyRole('USER', 'COMPANY_ADMIN')")
+    public ResponseEntity<AppointmentDTO> createAppointment(@RequestBody AppointmentDTO appointmentDTO) {
 
-        Appointment appointment = mapper.mapToModel(appointmentDTO, Appointment.class);
-        appointment = appointmentService.save(appointment);
-        return new ResponseEntity<>(mapper.mapToDto(appointment, AppointmentDTO.class), HttpStatus.CREATED);
+        return appointmentService.create(appointmentDTO).map(ResponseEntity::ok).orElse(ResponseEntity.badRequest().build());
     }
 
     @GetMapping(value = "/{id}")
