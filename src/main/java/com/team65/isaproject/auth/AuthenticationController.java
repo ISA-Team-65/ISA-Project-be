@@ -13,7 +13,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin("http://localhost:3000")
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
 @Tag(name = "Authorization", description = "Log In and Register")
