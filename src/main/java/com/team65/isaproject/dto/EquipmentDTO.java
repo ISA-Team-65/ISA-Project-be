@@ -20,5 +20,5 @@ public class EquipmentDTO {
     private double rating;
     private double price;
     private Integer companyId;
-    private Appointment appointment;
+    private Integer appointmentId;
 }

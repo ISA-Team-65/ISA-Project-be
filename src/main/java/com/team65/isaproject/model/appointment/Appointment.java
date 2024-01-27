@@ -20,19 +20,18 @@ public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String adminName;
-    private String adminLastname;
     private LocalDateTime dateTime;
     private double duration;
     private AppointmentStatus status;
     private Integer companyId;
     private boolean isReserved;
     private Integer userId;
+    private Integer adminId;
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "appointment", cascade = CascadeType.ALL)
     private List<Equipment> equipmentList;
 
     @Override
     public String toString() {
-        return "Appointment{" + "id=" + id + ", adminName='" + adminName + '\'' + ", adminLastname='" + adminLastname + '\'' + '}';
+        return "Appointment{" + "id=" + id + ", adminId='" + adminId + '\'' + '}';
     }
 }

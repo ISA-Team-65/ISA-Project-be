@@ -17,13 +17,12 @@ import java.util.List;
 public class AppointmentDTO {
 
     private Integer id;
-    private String adminName;
-    private String adminLastname;
     private LocalDateTime dateTime;
     private double duration;
     private AppointmentStatus status;
     private Integer companyId;
     private boolean isReserved;
     private Integer userId;
-    private List<Equipment> equipmentList;
+    private Integer adminId;
+    private List<EquipmentDTO> equipmentList;
 }
