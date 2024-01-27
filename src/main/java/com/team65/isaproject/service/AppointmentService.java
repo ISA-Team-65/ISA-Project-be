@@ -193,4 +193,17 @@ public class AppointmentService {
         BitMatrix bitMatrix = barcodeWriter.encode(data, BarcodeFormat.QR_CODE, 200, 200);
         return MatrixToImageWriter.toBufferedImage(bitMatrix);
     }
+
+    public List<Appointment> getAllAppointmentsByUserId(Integer id){
+
+        ArrayList<Appointment> appointments = new ArrayList<>();
+
+        for(Appointment a : findAll()){
+            if(a.getUserId() != null && a.getUserId().equals(id)){
+                appointments.add(a);
+            }
+        }
+
+        return appointments;
+    }
 }
