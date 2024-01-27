@@ -25,5 +25,5 @@ public class Address {
     private Integer streetNumber;
     private double latitude;
     private double longitude;
-    private Integer companyId;
+//    private Integer companyId;
 }

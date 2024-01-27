@@ -25,7 +25,8 @@ public class UserService {
     public User update(User user) {
         User temp = repository.findById(user.getId()).orElseGet(null);
         if(temp != null){
-            temp.setAddress(user.getAddress());
+//            temp.setAddress(user.getAddress());
+            temp.setAddressId(user.getAddressId());
             temp.setEmail(user.getEmail());
             temp.setPassword(user.getPassword());
             temp.setFirstName(user.getFirstName());

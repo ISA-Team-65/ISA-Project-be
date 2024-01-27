@@ -1,8 +1,14 @@
-INSERT INTO Company (id, company_name, address, description, rating)
+INSERT INTO Address (id, country, city, street, street_number, latitude, longitude)
 VALUES
-    (-1, 'Company1', 'Alekse Santica','Description1', 4.5),
-    (-2, 'Company2', 'Lasla Gala','Description2', 3.8),
-    (-3, 'Company3', 'Mite Ruzica','Description3', 4.2);
+    (-1, 'Srbija', 'Beograd', 'Knez Mihajlova', 23, 43.23, 33.23),
+    (-2, 'Madjarska', 'Budimpesta', 'Vaci utca', 33, 23.12, 12.33),
+    (-3, 'Austrija', 'Bec', 'Mariahilferstrasse', 456, 12.32, 65.32);
+
+INSERT INTO Company (id, company_name, address_id, description, rating)
+VALUES
+    (-1, 'Company1', -3,'Description1', 4.5),
+    (-2, 'Company2', -1,'Description2', 3.8),
+    (-3, 'Company3', -2,'Description3', 4.2);
 
 INSERT INTO Appointment (id, admin_name, admin_lastname, date_time, duration, status, company_id, is_reserved, user_id)
 VALUES
@@ -18,8 +24,8 @@ VALUES
     (-4, 'Equipment4', 3, 'Description4', 4.5, 180.0, -1, NULL),  --3
     (-5, 'Equipment5', 4, 'Description5', 4.5, 180.0, -1, NULL);  --4
 
-INSERT INTO _user (id, address, email, enabled, first_name, last_name, last_password_reset_date, password, phone_number, profession, username, company_id, role)
+INSERT INTO _user (id, address_id, email, enabled, first_name, last_name, last_password_reset_date, password, phone_number, profession, username, company_id, role)
 VALUES
-    (-1, 'Melhiora Erdujheljija 2', 'peraperic@gmail.com', true, 'Pera', 'Peric', null, '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '+38763245234', 'programmer', 'peraperic', -1, 'USER'),
-    (-2, 'Melhiora Erdujheljija 2', 'peraperic@gmail.com', true, 'Pera', 'Peric', null, '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '+38763245234', 'programmer', 'peraperic1', -1, 'COMPANY_ADMIN'),
-    (-3, 'Melhiora Erdujheljija 2', 'peraperic@gmail.com', true, 'Pera', 'Peric', null, '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '+38763245234', 'programmer', 'peraperic2', -1, 'SYSTEM_ADMIN');
+    (-1, -1, 'peraperic@gmail.com', true, 'Pera', 'Peric', null, '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '+38763245234', 'programmer', 'peraperic', -1, 'USER'),
+    (-2, -2 , 'peraperic@gmail.com', true, 'Pera', 'Peric', null, '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '+38763245234', 'programmer', 'peraperic1', -1, 'COMPANY_ADMIN'),
+    (-3, -3 , 'peraperic@gmail.com', true, 'Pera', 'Peric', null, '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '+38763245234', 'programmer', 'peraperic2', -1, 'SYSTEM_ADMIN');

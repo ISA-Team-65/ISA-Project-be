@@ -19,7 +19,7 @@ public class Company {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String companyName;
-    private String address;
+    private Integer addressId;
     private String description;
     private double rating;
 }
