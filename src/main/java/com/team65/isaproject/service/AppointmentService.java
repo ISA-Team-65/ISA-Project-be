@@ -172,7 +172,7 @@ public class AppointmentService {
     private String generateQRCodeData(Appointment appointment) {
         // var equipment = equipmentRepository.findByAppointmentId(appointment.getId()).orElseThrow().getName();
         var receiver = userRepository.findById(appointment.getUserId()).orElseThrow().getFirstName();
-        var administrator = appointment.getAdminName() + appointment.getAdminLastname();
+        var administrator = userRepository.findById(appointment.getAdminId()).orElseThrow().getFirstName() + userRepository.findById(appointment.getAdminId()).orElseThrow().getLastName();
         var company = companyRepository.findById(appointment.getCompanyId()).orElseThrow().getCompanyName();
 
         return String.format("{Date & time: %s,\n" +
