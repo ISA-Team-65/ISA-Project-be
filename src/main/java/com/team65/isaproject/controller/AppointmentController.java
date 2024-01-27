@@ -39,6 +39,7 @@ public class AppointmentController {
     }
 
     @GetMapping(value = "/{id}")
+    @PreAuthorize("hasAnyRole('USER', 'COMPANY_ADMIN')")
     public ResponseEntity<AppointmentDTO> getAppointment(@PathVariable Integer id)
     {
         Appointment appointment = appointmentService.findById(id);

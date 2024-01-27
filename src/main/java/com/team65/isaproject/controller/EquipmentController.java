@@ -128,14 +128,14 @@ public class EquipmentController {
         return new ResponseEntity<>( updatedEquipmentDto, HttpStatus.OK);
     }
 
-    @PutMapping(consumes = "application/json", value = "/addToAppointment")
-    @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<EquipmentDTO> addToAppointment(@RequestBody EquipmentDTO equipmentDTO){
-        EquipmentDTO updatedEquipmentDto = equipmentService.findById(equipmentDTO.getId());
-
-        updatedEquipmentDto.setAppointmentId(equipmentDTO.getAppointmentId());
-
-        updatedEquipmentDto = equipmentService.save(updatedEquipmentDto);
-        return new ResponseEntity<>( updatedEquipmentDto, HttpStatus.OK);
-    }
+//    @PutMapping(consumes = "application/json", value = "/addToAppointment")
+//    @PreAuthorize("hasRole('USER')")
+//    public ResponseEntity<EquipmentDTO> addToAppointment(@RequestBody EquipmentDTO equipmentDTO){
+//        EquipmentDTO updatedEquipmentDto = equipmentService.findById(equipmentDTO.getId());
+//
+//        updatedEquipmentDto.setAppointmentId(equipmentDTO.getAppointmentId());
+//
+//        updatedEquipmentDto = equipmentService.save(updatedEquipmentDto);
+//        return new ResponseEntity<>( updatedEquipmentDto, HttpStatus.OK);
+//    }
 }
