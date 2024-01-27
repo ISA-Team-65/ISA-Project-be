@@ -9,11 +9,13 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CompanyDTO {
+public class AddressDTO {
 
     private Integer id;
-    private String companyName;
-    private Integer addressId;
-    private String description;
-    private double rating;
+    private String country;
+    private String city;
+    private String street;
+    private Integer streetNumber;
+    private double latitude;
+    private double longitude;
 }

@@ -30,7 +30,7 @@ public class User implements UserDetails {
     private String password;
     private String firstName;
     private String lastName;
-    private String address;
+    private Integer addressId;
     private String phoneNumber;
     private String profession;
     private boolean enabled;

@@ -38,6 +38,7 @@ public class AppointmentController {
     }
 
     @GetMapping(value = "/{id}")
+    @PreAuthorize("hasAnyRole('USER', 'COMPANY_ADMIN')")
     public ResponseEntity<AppointmentDTO> getAppointment(@PathVariable Integer id)
     {
         Appointment appointment = appointmentService.findById(id);
@@ -46,6 +47,8 @@ public class AppointmentController {
         {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+
+        var aa = new ResponseEntity<>(mapper.mapToDto(appointment, AppointmentDTO.class), HttpStatus.OK);
 
         return new ResponseEntity<>(mapper.mapToDto(appointment, AppointmentDTO.class), HttpStatus.OK);
     }

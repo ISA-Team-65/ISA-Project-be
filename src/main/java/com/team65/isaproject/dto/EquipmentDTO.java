@@ -1,5 +1,6 @@
 package com.team65.isaproject.dto;
 
+import com.team65.isaproject.model.appointment.Appointment;
 import com.team65.isaproject.model.equipment.EquipmentType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

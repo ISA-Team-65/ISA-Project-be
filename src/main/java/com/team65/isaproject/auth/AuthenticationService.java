@@ -33,7 +33,7 @@ public class AuthenticationService {
                 .firstName(request.getFirstname())
                 .lastName(request.getLastname())
                 .email(request.getEmail())
-                .address(request.getAddress())
+                .addressId(request.getAddressId())
                 .phoneNumber(request.getPhoneNumber())
                 .profession(request.getProfession())
                 .companyId(request.getCompanyId())

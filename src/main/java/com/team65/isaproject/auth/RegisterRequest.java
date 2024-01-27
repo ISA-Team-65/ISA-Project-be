@@ -16,7 +16,7 @@ public class RegisterRequest {
     private String firstname;
     private String lastname;
     private String email;
-    private String address;
+    private Integer addressId;
     private String phoneNumber;
     private String profession;
     private Integer companyId;

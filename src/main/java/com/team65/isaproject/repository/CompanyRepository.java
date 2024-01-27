@@ -10,6 +10,6 @@ import java.util.List;
 
 public interface CompanyRepository extends JpaRepository<Company, Integer> {
 
-    @Query("SELECT c FROM Company c WHERE LOWER(c.companyName) LIKE LOWER(CONCAT('%', :prefix, '%')) AND LOWER(c.address) LIKE LOWER(CONCAT('%', :address, '%'))")
-    List<Company> findByCompanyNameOrAddressContainingIgnoreCase(@Param("prefix") String prefix, @Param("address") String address);
+//    @Query("SELECT c FROM Company c WHERE LOWER(c.companyName) LIKE LOWER(CONCAT('%', :prefix, '%')) AND LOWER(c.address) LIKE LOWER(CONCAT('%', :address, '%'))")
+//    List<Company> findByCompanyNameOrAddressContainingIgnoreCase(@Param("prefix") String prefix, @Param("address") String address);
 }

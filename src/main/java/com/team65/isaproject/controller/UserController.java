@@ -59,7 +59,8 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        user.setAddress(userDTO.getAddress());
+//        user.setAddress(userDTO.getAddress());
+        user.setAddressId(userDTO.getAddressId());
         user.setEmail(userDTO.getEmail());
         user.setPassword(userDTO.getPassword());
         user.setFirstName(userDTO.getFirstName());
@@ -111,7 +112,8 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        user.setAddress(userDTO.getAddress());
+//        user.setAddress(userDTO.getAddress());
+        user.setAddressId(userDTO.getAddressId());
         user.setEmail(userDTO.getEmail());
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
