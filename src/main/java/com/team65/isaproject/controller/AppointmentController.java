@@ -78,19 +78,27 @@ public class AppointmentController {
 
     @GetMapping(value = "/byUserId/{id}")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<List<AppointmentDTO>> getAllByUserId(@PathVariable Integer id){
+    public ResponseEntity<List<AppointmentDTO>> getAllByUserId(@PathVariable Integer id) {
         List<Appointment> appointments = appointmentService.getAllAppointmentsByUserId(id);
 
         List<AppointmentDTO> appointmentDTOS = new ArrayList<>();
 
-        for(Appointment a : appointments){
+        for (Appointment a : appointments) {
             appointmentDTOS.add(mapper.mapToDto(a, AppointmentDTO.class));
         }
 
-        if(appointmentDTOS.isEmpty()){
+        if (appointmentDTOS.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         return new ResponseEntity<>(appointmentDTOS, HttpStatus.OK);
+
+    }
+
+    @DeleteMapping("/{id}/{userId}")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<String> cancelAppointment(@PathVariable Integer id, @PathVariable Integer userId) {
+        var response = appointmentService.cancel(id, userId);
+        return ResponseEntity.ok(response);
     }
 }
