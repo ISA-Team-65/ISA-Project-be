@@ -71,14 +71,14 @@ public class CompanyController {
         return new ResponseEntity<>(mapper.mapToDto(company, CompanyDTO.class), HttpStatus.OK);
     }
 
-//    @GetMapping("/search")
-//    public ResponseEntity<List<CompanyDTO>> searchCompaniesByNameAndAddress(@RequestParam String prefix, @RequestParam String address) {
-//        List<Company> companies = companyService.searchCompaniesByNameAndAddress(prefix, address);
-//        List<CompanyDTO> companyDTOS = new ArrayList<>();
-//        for (Company company : companies) {
-//            CompanyDTO companyDTO = mapper.mapToDto(company, CompanyDTO.class);
-//            companyDTOS.add(companyDTO);
-//        }
-//        return new ResponseEntity<>(companyDTOS, HttpStatus.OK);
-//    }
+    @GetMapping("/search")
+    public ResponseEntity<List<CompanyDTO>> searchCompaniesByNameAndAddress(@RequestParam String prefix, @RequestParam String address) {
+        List<Company> companies = companyService.searchCompaniesByNameAndAddress(prefix, address);
+        List<CompanyDTO> companyDTOS = new ArrayList<>();
+        for (Company company : companies) {
+            CompanyDTO companyDTO = mapper.mapToDto(company, CompanyDTO.class);
+            companyDTOS.add(companyDTO);
+        }
+        return new ResponseEntity<>(companyDTOS, HttpStatus.OK);
+    }
 }
