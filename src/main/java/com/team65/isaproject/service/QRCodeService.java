@@ -15,11 +15,13 @@ import org.springframework.stereotype.Service;
 import com.google.zxing.NotFoundException;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.Result;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.File;
+import java.io.InputStream;
 
 @Service
 @RequiredArgsConstructor
@@ -65,17 +67,25 @@ public class QRCodeService {
                 appointment.getId());
     }
 
-    public static String decodeQRCode(File qrCodeImage) throws IOException, NotFoundException {
-        BufferedImage bufferedImage = ImageIO.read(qrCodeImage);
-        LuminanceSource source = new BufferedImageLuminanceSource(bufferedImage);
-        BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-
+    public String decodeQRCode(MultipartFile qrCodeImage) throws IOException, NotFoundException {
         try {
-            Result result = new MultiFormatReader().decode(bitmap);
-            return result.getText();
-        } catch (NotFoundException e) {
+            // Check if the file is an image
+            if (!qrCodeImage.getContentType().startsWith("image/")) {
+                throw new IllegalArgumentException("Uploaded file is not an image.");
+            }
+
+            // Obtain an InputStream from the MultipartFile
+            try (InputStream inputStream = qrCodeImage.getInputStream()) {
+                BufferedImage bufferedImage = ImageIO.read(inputStream);
+                LuminanceSource source = new BufferedImageLuminanceSource(bufferedImage);
+                BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+
+                Result result = new MultiFormatReader().decode(bitmap);
+                return result.getText();
+            }
+        } catch (IOException | NotFoundException e) {
             e.printStackTrace();
-            return null;
+            throw new RuntimeException("Error decoding QR code", e);
         }
     }
 }

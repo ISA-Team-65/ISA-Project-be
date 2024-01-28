@@ -37,6 +37,7 @@ public class AppointmentService {
     private final Mapper<Appointment, AppointmentDTO> mapper;
     private final EmailService emailService;
 
+
     public List<Appointment> findAll(){
         return appointmentRepository.findAll();
     }
@@ -98,5 +99,5 @@ public class AppointmentService {
             return Optional.empty();
         }
     }
-
+    
 }
