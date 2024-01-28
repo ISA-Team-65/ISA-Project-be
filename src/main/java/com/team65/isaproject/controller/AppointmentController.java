@@ -87,10 +87,6 @@ public class AppointmentController {
             appointmentDTOS.add(mapper.mapToDto(a, AppointmentDTO.class));
         }
 
-        if (appointmentDTOS.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
         return new ResponseEntity<>(appointmentDTOS, HttpStatus.OK);
 
     }
