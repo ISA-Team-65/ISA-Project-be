@@ -82,9 +82,9 @@ public class UserController {
             userDTOS.add(mapper.mapToDto(u, UserDTO.class));
         }
 
-        if(userDTOS.isEmpty()){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+//        if(userDTOS.isEmpty()){
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
 
         return new ResponseEntity<>(userDTOS, HttpStatus.OK);
     }
