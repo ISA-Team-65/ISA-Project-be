@@ -13,6 +13,7 @@ public class CompanyDTO {
 
     private Integer id;
     private String companyName;
+    private AddressDTO address;
     private Integer addressId;
     private String description;
     private double rating;

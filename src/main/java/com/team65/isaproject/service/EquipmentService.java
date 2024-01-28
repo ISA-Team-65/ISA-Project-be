@@ -59,4 +59,15 @@ public class EquipmentService {
     public void delete(Integer id){
         equipmentRepository.deleteById(id);
     }
+
+    public void removeAppointment(Integer appointmentId) {
+        var equipment = equipmentRepository.findAllByAppointmentId(appointmentId);
+        if (equipment.isPresent()) {
+            for (Equipment item :
+                    equipment.get()) {
+                item.setAppointment(null);
+                equipmentRepository.save(item);
+            }
+        }
+    }
 }

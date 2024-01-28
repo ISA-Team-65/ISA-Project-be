@@ -27,7 +27,7 @@ public class Appointment {
     private boolean isReserved;
     private Integer userId;
     private Integer adminId;
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "appointment", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "appointment")
     private List<Equipment> equipmentList;
 
     @Override
