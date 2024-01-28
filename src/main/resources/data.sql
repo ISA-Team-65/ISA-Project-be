@@ -12,7 +12,7 @@ VALUES
 
 INSERT INTO Appointment (id, date_time, duration, status, company_id, is_reserved, user_id, admin_id)
 VALUES
-    (-1, '2023-12-21 10:00:00', 20, 0, -1, FALSE, NULL, -2),
+    (-1, '2023-12-21 10:00:00', 20, 0, -1, TRUE, -1, -2),
     (-2, '2023-12-22 14:30:00', 15, 0, -1, FALSE, NULL, -2),
     (-3, '2023-12-28 16:15:00', 40, 0, -3, FALSE, NULL, -2),
     (-4, '2023-12-26 17:45:00', 40, 0, -2, FALSE, NULL, -2);

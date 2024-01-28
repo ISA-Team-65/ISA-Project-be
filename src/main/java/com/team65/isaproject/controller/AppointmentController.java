@@ -48,8 +48,6 @@ public class AppointmentController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        var aa = new ResponseEntity<>(mapper.mapToDto(appointment, AppointmentDTO.class), HttpStatus.OK);
-
         return new ResponseEntity<>(mapper.mapToDto(appointment, AppointmentDTO.class), HttpStatus.OK);
     }
 
@@ -76,5 +74,23 @@ public class AppointmentController {
     public ResponseEntity<AppointmentDTO> updateAppointment(@RequestBody AppointmentDTO appointmentDTO){
         var appointment = appointmentService.update(appointmentDTO);
         return new ResponseEntity<>(appointment, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/byUserId/{id}")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List<AppointmentDTO>> getAllByUserId(@PathVariable Integer id){
+        List<Appointment> appointments = appointmentService.getAllAppointmentsByUserId(id);
+
+        List<AppointmentDTO> appointmentDTOS = new ArrayList<>();
+
+        for(Appointment a : appointments){
+            appointmentDTOS.add(mapper.mapToDto(a, AppointmentDTO.class));
+        }
+
+        if(appointmentDTOS.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(appointmentDTOS, HttpStatus.OK);
     }
 }

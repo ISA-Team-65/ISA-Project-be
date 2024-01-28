@@ -35,6 +35,7 @@ public class AppointmentService {
     private final CompanyRepository companyRepository;
     private final EquipmentRepository equipmentRepository;
     private final Mapper<Appointment, AppointmentDTO> mapper;
+    private final EmailService emailService;
 
     public List<Appointment> findAll(){
         return appointmentRepository.findAll();
@@ -48,7 +49,7 @@ public class AppointmentService {
         var appointment = mapper.mapToModel(appointmentDto, Appointment.class);
         var temp = appointmentRepository.save(appointment);
 
-        sendEmail(userRepository.findById(appointment.getUserId()).orElseThrow().getEmail(), temp);
+        emailService.sendEmailWithQRCode(userRepository.findById(appointment.getUserId()).orElseThrow().getEmail(), temp);
 
         return mapper.mapToDto(temp, AppointmentDTO.class);
     }
@@ -88,7 +89,7 @@ public class AppointmentService {
             var appointment = mapper.mapToModel(appointmentDTO, Appointment.class);
 
             var newAppointment = appointmentRepository.save(appointment);
-            sendEmail(userRepository.findById(appointment.getUserId()).orElseThrow().getEmail(), newAppointment);
+            emailService.sendEmailWithQRCode(userRepository.findById(appointment.getUserId()).orElseThrow().getEmail(), newAppointment);
             return Optional.ofNullable(
                     mapper.mapToDto(
                             newAppointment,
@@ -192,5 +193,18 @@ public class AppointmentService {
         QRCodeWriter barcodeWriter = new QRCodeWriter();
         BitMatrix bitMatrix = barcodeWriter.encode(data, BarcodeFormat.QR_CODE, 200, 200);
         return MatrixToImageWriter.toBufferedImage(bitMatrix);
+    }
+
+    public List<Appointment> getAllAppointmentsByUserId(Integer id){
+
+        ArrayList<Appointment> appointments = new ArrayList<>();
+
+        for(Appointment a : findAll()){
+            if(a.getUserId() != null && a.getUserId().equals(id)){
+                appointments.add(a);
+            }
+        }
+
+        return appointments;
     }
 }
