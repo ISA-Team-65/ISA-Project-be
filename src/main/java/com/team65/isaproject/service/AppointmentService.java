@@ -116,7 +116,7 @@ public class AppointmentService {
 
     public String cancel(Integer id, Integer userId) {
         try {
-            //equipmentService.removeAppointment(id);
+            equipmentService.removeAppointment(id);
             var appointment = appointmentRepository.findById(id);
             if (!Objects.equals(appointment.orElseThrow().getUserId(), userId)) throw new Exception("Invalid user");
 
