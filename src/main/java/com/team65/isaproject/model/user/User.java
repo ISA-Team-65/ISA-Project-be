@@ -33,6 +33,7 @@ public class User implements UserDetails {
     private Integer addressId;
     private String phoneNumber;
     private String profession;
+    private Integer penaltyPoints;
     private boolean enabled;
     private Timestamp lastPasswordResetDate;
     private Integer companyId;

@@ -3,6 +3,7 @@ package com.team65.isaproject.controller;
 import com.team65.isaproject.dto.CompanyDTO;
 import com.team65.isaproject.mapper.Mapper;
 import com.team65.isaproject.model.Company;
+import com.team65.isaproject.service.AddressService;
 import com.team65.isaproject.service.CompanyService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ import java.util.List;
 public class CompanyController {
 
     private final CompanyService companyService;
+    private final AddressService addressService;
     private final Mapper<Company, CompanyDTO> mapper;
 
     @PostMapping(consumes = "application/json")
@@ -60,9 +62,8 @@ public class CompanyController {
         if (company == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-
-//        company.setAddress(companyDTO.getAddress());
-        company.setAddressId(companyDTO.getAddressId());
+        var addressId = companyDTO.getAddress().getId();
+        company.setAddress(addressService.findById(addressId));
         company.setCompanyName(companyDTO.getCompanyName());
         company.setDescription(companyDTO.getDescription());
         company.setRating(companyDTO.getRating());
@@ -71,14 +72,14 @@ public class CompanyController {
         return new ResponseEntity<>(mapper.mapToDto(company, CompanyDTO.class), HttpStatus.OK);
     }
 
-//    @GetMapping("/search")
-//    public ResponseEntity<List<CompanyDTO>> searchCompaniesByNameAndAddress(@RequestParam String prefix, @RequestParam String address) {
-//        List<Company> companies = companyService.searchCompaniesByNameAndAddress(prefix, address);
-//        List<CompanyDTO> companyDTOS = new ArrayList<>();
-//        for (Company company : companies) {
-//            CompanyDTO companyDTO = mapper.mapToDto(company, CompanyDTO.class);
-//            companyDTOS.add(companyDTO);
-//        }
-//        return new ResponseEntity<>(companyDTOS, HttpStatus.OK);
-//    }
+    @GetMapping("/search")
+    public ResponseEntity<List<CompanyDTO>> searchCompaniesByNameAndAddress(@RequestParam String prefix, @RequestParam String address) {
+        List<Company> companies = companyService.searchCompaniesByNameAndAddress(prefix, address);
+        List<CompanyDTO> companyDTOS = new ArrayList<>();
+        for (Company company : companies) {
+            CompanyDTO companyDTO = mapper.mapToDto(company, CompanyDTO.class);
+            companyDTOS.add(companyDTO);
+        }
+        return new ResponseEntity<>(companyDTOS, HttpStatus.OK);
+    }
 }

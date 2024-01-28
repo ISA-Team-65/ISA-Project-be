@@ -21,5 +21,6 @@ public class UserDTO {
     private String phoneNumber;
     private String profession;
     private Integer companyId;
+    private Integer penaltyPoints;
     private String role;
 }

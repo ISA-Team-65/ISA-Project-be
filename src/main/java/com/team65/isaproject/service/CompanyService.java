@@ -33,7 +33,7 @@ public class CompanyService {
         return companyRepository.save(company);
     }
 
-//    public List<Company> searchCompaniesByNameAndAddress(String prefix, String address) {
-//        return companyRepository.findByCompanyNameOrAddressContainingIgnoreCase(prefix, address);
-//    }
+    public List<Company> searchCompaniesByNameAndAddress(String prefix, String address) {
+        return companyRepository.findByCompanyNameOrAddressContainingIgnoreCase(prefix);
+    }
 }

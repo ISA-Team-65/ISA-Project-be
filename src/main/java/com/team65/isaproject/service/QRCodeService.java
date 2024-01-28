@@ -7,6 +7,7 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.team65.isaproject.model.appointment.Appointment;
+import com.team65.isaproject.model.equipment.Equipment;
 import com.team65.isaproject.repository.CompanyRepository;
 import com.team65.isaproject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,8 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.File;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +32,7 @@ public class QRCodeService {
 
     private final UserRepository userRepository;
     private final CompanyRepository companyRepository;
+    private final EquipmentService equipmentService;
 
     public BufferedImage generateQRCode(String data) throws WriterException {
         QRCodeWriter barcodeWriter = new QRCodeWriter();
@@ -37,30 +41,33 @@ public class QRCodeService {
     }
 
     public String generateQRCodeData(Appointment appointment) {
-        //List<Equipment> equipmentAll = equipmentRepository.findByAppointmentId(appointment.getId());
         var receiver = userRepository.findById(appointment.getUserId()).orElseThrow().getFirstName();
         var administrator = userRepository.findById(appointment.getAdminId()).orElseThrow().getFirstName() +
                 userRepository.findById(appointment.getAdminId()).orElseThrow().getLastName();
         var company = companyRepository.findById(appointment.getCompanyId()).orElseThrow().getCompanyName();
-        //List<String> equipmentNames = new ArrayList<String>();
-        //var equipmentAll = appointment.getEquipmentList();
-        //String equipmentList = new String();
+        var equipment = equipmentService.findAllByAppointmentId(appointment.getId());
+        StringBuilder equipmentNames = new StringBuilder();
+        if (equipment.isPresent()) {
+            for (Equipment item :
+                    equipment.get()) {
+                equipmentNames.append(item.getName()).append(", ");
+            }
+            if (!equipmentNames.isEmpty()) {
+                equipmentNames.setLength(equipmentNames.length() - 2);
+            }
+        }
 
-//        for (Equipment e: equipmentAll
-//             ) {
-//            equipmentNames.add(e.getName());
-//            equipmentList += e.getName() + ", ";
-//        }
-
-        return String.format("{Date & time: %s,\n" +
-                        //"equipment: %s" +
-                        "receiver: %s,\n" +
-                        "administrator: %s,\n" +
-                        "company: %s,\n" +
-                        "appointmentId: %d\n" +
-                        "}",
+        return String.format("""
+                        {
+                            Date & time: %s,
+                            equipment: [ %s ],
+                            receiver: %s,
+                            administrator: %s,
+                            company: %s,
+                            appointmentId: %d
+                         }""",
                 appointment.getDateTime().toString(),
-                //equipmentList,
+                equipmentNames,
                 receiver,
                 administrator,
                 company,

@@ -77,4 +77,10 @@ public class UserService {
             return Optional.empty();
         }
     }
+
+    public void penalize(Integer id, Integer points) {
+        var user = repository.findById(id);
+        user.orElseThrow().setPenaltyPoints(user.get().getPenaltyPoints() + points);
+        repository.save(user.get());
+    }
 }

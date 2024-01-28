@@ -9,6 +9,7 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import com.team65.isaproject.dto.AppointmentDTO;
 import com.team65.isaproject.mapper.Mapper;
 import com.team65.isaproject.model.appointment.Appointment;
+import com.team65.isaproject.model.equipment.Equipment;
 import com.team65.isaproject.repository.AppointmentRepository;
 import com.team65.isaproject.repository.CompanyRepository;
 import com.team65.isaproject.repository.EquipmentRepository;
@@ -21,10 +22,10 @@ import javax.mail.*;
 import javax.mail.internet.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Properties;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -32,10 +33,11 @@ public class AppointmentService {
 
     private final AppointmentRepository appointmentRepository;
     private final UserRepository userRepository;
-    private final CompanyRepository companyRepository;
-    private final EquipmentRepository equipmentRepository;
     private final Mapper<Appointment, AppointmentDTO> mapper;
     private final EmailService emailService;
+    private final EquipmentService equipmentService;
+    private final UserService userService;
+    private final CompanyRepository companyRepository;
 
 
     public List<Appointment> findAll(){
@@ -100,4 +102,50 @@ public class AppointmentService {
         }
     }
     
+    public List<Appointment> getAllAppointmentsByUserId(Integer id) {
+
+        ArrayList<Appointment> appointments = new ArrayList<>();
+
+        for (Appointment a : findAll()) {
+            if (a.getUserId() != null && a.getUserId().equals(id)) {
+                appointments.add(a);
+            }
+        }
+
+        return appointments;
+    }
+
+    public String cancel(Integer id, Integer userId) {
+        try {
+            equipmentService.removeAppointment(id);
+            var appointment = appointmentRepository.findById(id);
+            if (!Objects.equals(appointment.orElseThrow().getUserId(), userId)) throw new Exception("Invalid user");
+
+            LocalDateTime appointmentDateTime = appointment.orElseThrow().getDateTime();
+            Duration timeUntilAppointment = Duration.between(LocalDateTime.now(), appointmentDateTime);
+            boolean isLessThan24Hours = timeUntilAppointment.compareTo(Duration.ofHours(24)) < 0;
+
+            if (isLessThan24Hours) {
+                userService.penalize(userId, 2);
+            } else {
+                userService.penalize(userId, 1);
+            }
+            appointment.get().setReserved(false);
+            appointment.get().setUserId(null);
+            appointmentRepository.save(appointment.get());
+            return "Appointment canceled";
+        } catch (Exception e) {
+            return "Cancellation unsuccessful";
+        }
+    }
+
+    public String delete(Integer id) {
+        try {
+            equipmentService.removeAppointment(id);
+            appointmentRepository.deleteById(id);
+            return "Appointment deleted";
+        } catch (Exception e) {
+            return "Deletion unsuccessful";
+        }
+    }
 }
