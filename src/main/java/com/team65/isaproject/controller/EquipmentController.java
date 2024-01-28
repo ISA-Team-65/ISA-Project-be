@@ -59,9 +59,9 @@ public class EquipmentController {
             equipmentDTOS.add(mapper.mapToDto(e, EquipmentDTO.class));
         }
 
-        if(equipmentDTOS.isEmpty()){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+//        if(equipmentDTOS.isEmpty()){
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
 
         return new ResponseEntity<>(equipmentDTOS, HttpStatus.OK);
     }
