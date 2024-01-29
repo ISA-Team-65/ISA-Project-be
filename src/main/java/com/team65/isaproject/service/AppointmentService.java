@@ -174,11 +174,21 @@ public class AppointmentService {
             };
 
             var newAppointment = appointmentRepository.save(appointment);
+
+            if (!appointment.getEquipmentList().isEmpty()) {
+                for (Equipment item :
+                        appointment.getEquipmentList()) {
+                    item.setAppointment(appointment);
+                    equipmentService.save(item);
+                }
+            }
+
             emailService.sendEmailWithQRCode(userRepository.findById(appointment.getUserId()).orElseThrow().getEmail(), newAppointment);
             return Optional.ofNullable(
                     mapper.mapToDto(
                             newAppointment,
                             AppointmentDTO.class));
+
         } catch (Exception e) {
             return Optional.empty();
         }
