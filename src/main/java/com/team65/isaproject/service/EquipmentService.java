@@ -40,6 +40,10 @@ public class EquipmentService {
         return mapper.mapToDto(equipmentRepository.save(mapper.mapToModel(equipmentDto, Equipment.class)), EquipmentDTO.class);
     }
 
+    public Equipment save(Equipment equipment) {
+        return equipmentRepository.save(equipment);
+    }
+
     public List<Equipment> getAllEquipmentByCompanyId(Integer id){
 
         ArrayList<Equipment> equipment = new ArrayList<>();
