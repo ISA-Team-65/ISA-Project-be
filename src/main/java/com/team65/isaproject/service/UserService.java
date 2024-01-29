@@ -2,8 +2,10 @@ package com.team65.isaproject.service;
 
 import com.team65.isaproject.dto.UserDTO;
 import com.team65.isaproject.mapper.Mapper;
+import com.team65.isaproject.model.appointment.Appointment;
 import com.team65.isaproject.model.user.Role;
 import com.team65.isaproject.model.user.User;
+import com.team65.isaproject.repository.AppointmentRepository;
 import com.team65.isaproject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -20,6 +23,7 @@ public class UserService {
 
     private final UserRepository repository;
     private final Mapper<User, UserDTO> mapper;
+    private final AppointmentRepository appointmentRepository;
 
 
     public User update(User user) {
@@ -82,5 +86,20 @@ public class UserService {
         var user = repository.findById(id);
         user.orElseThrow().setPenaltyPoints(user.get().getPenaltyPoints() + points);
         repository.save(user.get());
+    }
+
+    public List<User> getUsersThatReservedAppointment(Integer companyId){
+
+        ArrayList<User> users = new ArrayList<>();
+
+        for(User u : repository.findAll()){
+            for(Appointment a : appointmentRepository.findAll()){
+                if(Objects.equals(a.getUserId(), u.getId()) && !users.contains(u)){
+                    users.add(u);
+                }
+            }
+        }
+
+        return users;
     }
 }
