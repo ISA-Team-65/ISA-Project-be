@@ -7,6 +7,7 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.awt.*;
 import java.io.IOException;
@@ -15,6 +16,7 @@ import java.net.URISyntaxException;
 
 @SpringBootApplication
 @EnableMethodSecurity
+@EnableTransactionManagement
 public class IsaprojectApplication {
 
 	public static void main(String[] args) {
