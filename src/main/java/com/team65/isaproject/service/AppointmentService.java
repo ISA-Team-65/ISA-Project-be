@@ -271,6 +271,33 @@ public class AppointmentService {
         return appointments;
     }
 
+    @Transactional(readOnly = false)
+    public Appointment penaliseAfterReservation(Integer userId, Integer appointmentId){
+        Appointment appointment = findById(appointmentId);
+
+        for(Equipment e : appointment.getEquipmentList()){
+            e.setAppointment(null);
+            equipmentService.save(e);
+        }
+
+        userService.penalize(userId, 2);
+
+        appointment.setStatus(AppointmentStatus.PENALISED);
+        return appointmentRepository.save(appointment);
+    }
+    @Transactional(readOnly = false)
+    public Appointment pickUpEquipment(Integer appointmentId) {
+        Appointment appointment = findById(appointmentId);
+
+        for (Equipment e : appointment.getEquipmentList()) {
+            equipmentService.delete(e.getId());
+        }
+
+        appointment.setStatus(AppointmentStatus.PICKEDUP);
+        appointment.setPickUpDateTime(LocalDateTime.now());
+
+        return appointmentRepository.save(appointment);
+    }
     public List<AppointmentDTO> findAvailableAppointments(LocalDateTime dateTime, Integer companyId) {
         List<AppointmentDTO> availableAppointments = new ArrayList<AppointmentDTO>();
         for (int i = 0; i < 8; i++) {

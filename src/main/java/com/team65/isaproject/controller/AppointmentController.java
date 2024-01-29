@@ -156,4 +156,20 @@ public class AppointmentController {
         return new ResponseEntity<>(appointmentDTOS, HttpStatus.OK);
     }
 
+    @PutMapping(value = "/penaliseAfterReservation/{userId}/{appointmentId}")
+    @PreAuthorize("hasRole('COMPANY_ADMIN')")
+    public ResponseEntity<AppointmentDTO> penaliseAfterReservation(@PathVariable Integer userId, @PathVariable Integer appointmentId){
+        var appointment = appointmentService.penaliseAfterReservation(userId, appointmentId);
+//        return new ResponseEntity<>(appointment, HttpStatus.OK);
+
+        return new ResponseEntity<>(mapper.mapToDto(appointment, AppointmentDTO.class), HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/pickup/{appointmentId}")
+    @PreAuthorize("hasRole('COMPANY_ADMIN')")
+    public ResponseEntity<AppointmentDTO> pickUpEquipment(@PathVariable Integer appointmentId){
+        var appointment = appointmentService.pickUpEquipment(appointmentId);
+//        return new ResponseEntity<>(appointment, HttpStatus.OK);
+        return new ResponseEntity<>(mapper.mapToDto(appointment, AppointmentDTO.class), HttpStatus.OK);
+    }
 }
