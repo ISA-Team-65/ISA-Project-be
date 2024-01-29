@@ -102,4 +102,6 @@ public class UserService {
 
         return users;
     }
+
+    public List<User> findAll() { return repository.findAll(); }
 }

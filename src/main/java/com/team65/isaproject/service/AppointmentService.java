@@ -197,4 +197,18 @@ public class AppointmentService {
             return "Deletion unsuccessful";
         }
     }
+
+    public List<Appointment> getAllAppointmentsByAdminId(Integer id) {
+
+        ArrayList<Appointment> appointments = new ArrayList<>();
+
+        for (Appointment a : findAll()) {
+            if (a.getAdminId() != null && a.getAdminId().equals(id) && a.isReserved()) {
+                appointments.add(a);
+            }
+        }
+
+        return appointments;
+    }
+
 }

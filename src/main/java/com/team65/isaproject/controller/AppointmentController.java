@@ -109,7 +109,7 @@ public class AppointmentController {
     }
     
     @GetMapping(value = "/byUserId/{id}")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAnyRole('USER', 'COMPANY_ADMIN')")
     public ResponseEntity<List<AppointmentDTO>> getAllByUserId(@PathVariable Integer id) {
         List<Appointment> appointments = appointmentService.getAllAppointmentsByUserId(id);
 
@@ -128,4 +128,20 @@ public class AppointmentController {
         var response = appointmentService.cancel(id, userId);
         return ResponseEntity.ok(response);
     }
+
+
+    @GetMapping(value = "/byAdminId/{id}")
+    @PreAuthorize("hasRole('COMPANY_ADMIN')")
+    public ResponseEntity<List<AppointmentDTO>> getAllByAdminId(@PathVariable Integer id) {
+        List<Appointment> appointments = appointmentService.getAllAppointmentsByAdminId(id);
+
+        List<AppointmentDTO> appointmentDTOS = new ArrayList<>();
+
+        for (Appointment a : appointments) {
+            appointmentDTOS.add(mapper.mapToDto(a, AppointmentDTO.class));
+        }
+
+        return new ResponseEntity<>(appointmentDTOS, HttpStatus.OK);
+    }
+
 }
