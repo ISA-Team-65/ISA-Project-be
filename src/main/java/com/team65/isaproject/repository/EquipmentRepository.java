@@ -14,4 +14,5 @@ public interface EquipmentRepository extends JpaRepository<Equipment, Integer> {
     public List<Equipment> findAllByNameContainingIgnoreCase(@Param("name") String name);
 
     public Optional<List<Equipment>> findAllByAppointmentId(int appointmentId);
+    public void removeAllByAppointmentId(int appointmentId);
 }

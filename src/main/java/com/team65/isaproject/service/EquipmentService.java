@@ -76,4 +76,8 @@ public class EquipmentService {
     public Optional<List<Equipment>> findAllByAppointmentId(Integer id) {
         return equipmentRepository.findAllByAppointmentId(id);
     }
+
+    public void removeAllByAppointmentId(Integer id) {
+        equipmentRepository.removeAllByAppointmentId(id);
+    }
 }

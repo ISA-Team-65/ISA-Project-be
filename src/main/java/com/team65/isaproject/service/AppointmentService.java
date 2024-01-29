@@ -9,6 +9,7 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import com.team65.isaproject.dto.AppointmentDTO;
 import com.team65.isaproject.mapper.Mapper;
 import com.team65.isaproject.model.appointment.Appointment;
+import com.team65.isaproject.model.appointment.AppointmentStatus;
 import com.team65.isaproject.model.equipment.Equipment;
 import com.team65.isaproject.repository.AppointmentRepository;
 import com.team65.isaproject.repository.CompanyRepository;
@@ -26,6 +27,8 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
@@ -55,6 +58,52 @@ public class AppointmentService {
         emailService.sendEmailWithQRCode(userRepository.findById(appointment.getUserId()).orElseThrow().getEmail(), temp);
 
         return mapper.mapToDto(temp, AppointmentDTO.class);
+    }
+
+    public int update(String decodedQR) {
+        var appointmentId = extractAppointmentId(decodedQR);
+        var appointment = findById(appointmentId);
+        appointment.setStatus(AppointmentStatus.PICKEDUP);
+        var temp = appointmentRepository.save(appointment);
+
+        return appointmentId;
+    }
+
+    public boolean checkIfPickUpDatePassed(String decodedQR) {
+        var appointmentId = extractAppointmentId(decodedQR);
+        var appointment = findById(appointmentId);
+
+        LocalDateTime currentDateAndTime = LocalDateTime.now();
+
+        return currentDateAndTime.toLocalDate().isBefore(appointment.getDateTime().toLocalDate());
+    }
+
+    public int penaliseAppointment(String decodedQR) {
+        var appointmentId = extractAppointmentId(decodedQR);
+        var appointment = findById(appointmentId);
+
+        appointment.setStatus(AppointmentStatus.PENALISED);
+
+        return appointment.getUserId();
+    }
+
+    private static int extractAppointmentId(String decodedQR) {
+        // Define the regular expression pattern for extracting appointmentId
+        String pattern = "appointmentId: (\\d+)";
+        Pattern regex = Pattern.compile(pattern);
+
+        // Create a Matcher object
+        Matcher matcher = regex.matcher(decodedQR);
+
+        // Check if the pattern is found
+        if (matcher.find()) {
+            // Extract and parse the appointmentId from the matched group
+            String appointmentIdStr = matcher.group(1);
+            return Integer.parseInt(appointmentIdStr);
+        } else {
+            // Handle the case when appointmentId is not found
+            throw new IllegalArgumentException("AppointmentId not found in the decodedQR string");
+        }
     }
 
     public Appointment save(Appointment appointment){

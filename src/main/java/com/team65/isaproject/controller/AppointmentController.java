@@ -5,7 +5,9 @@ import com.team65.isaproject.dto.AppointmentDTO;
 import com.team65.isaproject.mapper.Mapper;
 import com.team65.isaproject.model.appointment.Appointment;
 import com.team65.isaproject.service.AppointmentService;
+import com.team65.isaproject.service.EquipmentService;
 import com.team65.isaproject.service.QRCodeService;
+import com.team65.isaproject.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -29,6 +31,8 @@ public class AppointmentController {
     private final AppointmentService appointmentService;
     private final Mapper<Appointment, AppointmentDTO> mapper;
     private final QRCodeService qrCodeService;
+    private final EquipmentService equipmentService;
+    private final UserService userService;
 
     @PostMapping(consumes = "application/json")
     @PreAuthorize("hasAnyRole('USER', 'COMPANY_ADMIN')")
@@ -84,11 +88,24 @@ public class AppointmentController {
     }
 
     @PostMapping(path = "/decodeQR", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasRole('COMPANY_ADMIN')")
     public ResponseEntity<String> decodeQRCode(@ModelAttribute("request") MultipartFile file) throws NotFoundException, IOException {
-//        File convertedFile = new File("Downloads/file.jpg");
-//        file.transferTo(convertedFile);
-        var dekodiraniQR = qrCodeService.decodeQRCode(file);
-        return ResponseEntity.ok(dekodiraniQR);
+        var decodedQR = qrCodeService.decodeQRCode(file);
+        var checkIfPickUpDatePassed = appointmentService.checkIfPickUpDatePassed(decodedQR);
+        if (!checkIfPickUpDatePassed) {
+            var userId = appointmentService.penaliseAppointment(decodedQR);
+            userService.penalize(userId, 2);
+            return ResponseEntity.ok("penalized");
+        }
+        return ResponseEntity.ok(decodedQR);
+    }
+
+    @PutMapping(path = "/doPickUpEquipment", consumes = "application/json")
+    @PreAuthorize("hasRole('COMPANY_ADMIN')")
+    public ResponseEntity<String> doPickUpEquipment(@RequestBody String decodedQR) {
+        var appointmentId = appointmentService.update(decodedQR);
+        equipmentService.removeAllByAppointmentId(appointmentId);
+        return ResponseEntity.ok("done");
     }
     
     @GetMapping(value = "/byUserId/{id}")
@@ -103,7 +120,6 @@ public class AppointmentController {
         }
 
         return new ResponseEntity<>(appointmentDTOS, HttpStatus.OK);
-
     }
 
     @DeleteMapping("/{id}/{userId}")

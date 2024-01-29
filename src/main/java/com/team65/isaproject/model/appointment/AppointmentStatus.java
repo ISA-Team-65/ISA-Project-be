@@ -4,5 +4,7 @@ public enum AppointmentStatus {
 
     NEW,
     PROCESSED,
-    DENIED
+    DENIED,
+    PICKEDUP,
+    PENALISED
 }
