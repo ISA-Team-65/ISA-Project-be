@@ -7,8 +7,10 @@ import com.team65.isaproject.repository.EquipmentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -69,5 +71,9 @@ public class EquipmentService {
                 equipmentRepository.save(item);
             }
         }
+    }
+
+    public Optional<List<Equipment>> findAllByAppointmentId(Integer id) {
+        return equipmentRepository.findAllByAppointmentId(id);
     }
 }

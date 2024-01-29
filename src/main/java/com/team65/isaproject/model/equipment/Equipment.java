@@ -24,7 +24,7 @@ public class Equipment {
     private double rating;
     private double price;
     private Integer companyId;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "appointment_id")
     private Appointment appointment;
 
