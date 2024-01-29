@@ -89,7 +89,7 @@ public class AppointmentController {
 
     @PostMapping(path = "/decodeQR", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasRole('COMPANY_ADMIN')")
-    public ResponseEntity<String> decodeQRCode(@ModelAttribute("request") MultipartFile file) throws NotFoundException, IOException {
+    public ResponseEntity<String> decodeQRCode(@RequestBody MultipartFile file) throws NotFoundException, IOException {
         var decodedQR = qrCodeService.decodeQRCode(file);
         var checkIfPickUpDatePassed = appointmentService.checkIfPickUpDatePassed(decodedQR);
         if (!checkIfPickUpDatePassed) {
@@ -100,9 +100,10 @@ public class AppointmentController {
         return ResponseEntity.ok(decodedQR);
     }
 
-    @PutMapping(path = "/doPickUpEquipment", consumes = "application/json")
+    @PostMapping(path = "/doPickUpEquipment", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasRole('COMPANY_ADMIN')")
-    public ResponseEntity<String> doPickUpEquipment(@RequestBody String decodedQR) {
+    public ResponseEntity<String> doPickUpEquipment(@RequestBody MultipartFile file) throws NotFoundException, IOException {
+        var decodedQR = qrCodeService.decodeQRCode(file);
         var appointmentId = appointmentService.update(decodedQR);
         equipmentService.removeAllByAppointmentId(appointmentId);
         return ResponseEntity.ok("done");

@@ -89,7 +89,7 @@ public class AppointmentService {
 
     private static int extractAppointmentId(String decodedQR) {
         // Define the regular expression pattern for extracting appointmentId
-        String pattern = "appointmentId: (\\d+)";
+        String pattern = "appointmentId: (-?\\d+)";
         Pattern regex = Pattern.compile(pattern);
 
         // Create a Matcher object
