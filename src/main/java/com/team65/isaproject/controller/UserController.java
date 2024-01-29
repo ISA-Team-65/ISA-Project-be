@@ -32,9 +32,9 @@ public class UserController {
 
     @PostMapping(consumes = "application/json")
     @PreAuthorize("hasRole('SYSTEM_ADMIN')")
-    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO){
+    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
         //ovde bi isla validacija
-        if(userDTO == null){
+        if (userDTO == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -73,30 +73,28 @@ public class UserController {
     }
 
     @GetMapping(value = "/byCompanyId/{id}")
-    public ResponseEntity<List<UserDTO>> getAllByCompanyId(@PathVariable Integer id){
+    public ResponseEntity<List<UserDTO>> getAllByCompanyId(@PathVariable Integer id) {
         List<User> users = userService.getAllUsersByCompanyId(id);
 
         List<UserDTO> userDTOS = new ArrayList<>();
 
-        for(User u : users){
+        for (User u : users) {
             userDTOS.add(mapper.mapToDto(u, UserDTO.class));
         }
 
-        if(userDTOS.isEmpty()){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+//        if(userDTOS.isEmpty()){
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
 
         return new ResponseEntity<>(userDTOS, HttpStatus.OK);
     }
 
     @GetMapping(value = "/getByUsername/{username}")
     @PreAuthorize("hasAnyRole('USER', 'COMPANY_ADMIN', 'SYSTEM_ADMIN')")
-    public ResponseEntity<UserDTO> getUserByUsername(@PathVariable String username)
-    {
+    public ResponseEntity<UserDTO> getUserByUsername(@PathVariable String username) {
         User user = userService.findByUsername(username);
 
-        if (user == null)
-        {
+        if (user == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
@@ -127,10 +125,10 @@ public class UserController {
     @Operation(summary = "Activate user account")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Activated",
-                    content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = AuthenticationResponse.class)) }),
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = AuthenticationResponse.class))}),
             @ApiResponse(responseCode = "404", description = "Not found",
-                    content = @Content) })
+                    content = @Content)})
     @PutMapping(value = "/activate")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<UserDTO> activateUser(
@@ -162,4 +160,19 @@ public class UserController {
 
         return user;
     }
+
+    @GetMapping(value = "/getUsersThatReservedAppointment/{companyId}")
+    @PreAuthorize("hasRole('COMPANY_ADMIN')")
+    public ResponseEntity<List<UserDTO>> getUsersThatReservedAppointment(@PathVariable Integer companyId) {
+        List<User> users = userService.getUsersThatReservedAppointment(companyId);
+
+        List<UserDTO> userDTOS = new ArrayList<>();
+
+        for (User u : users) {
+            userDTOS.add(mapper.mapToDto(u, UserDTO.class));
+        }
+
+        return new ResponseEntity<>(userDTOS, HttpStatus.OK);
+    }
+
 }
