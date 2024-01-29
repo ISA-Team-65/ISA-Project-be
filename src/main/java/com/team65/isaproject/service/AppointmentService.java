@@ -17,6 +17,7 @@ import com.team65.isaproject.repository.EquipmentRepository;
 import com.team65.isaproject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.imageio.ImageIO;
 import javax.mail.*;
@@ -211,4 +212,29 @@ public class AppointmentService {
         return appointments;
     }
 
+    public Appointment penaliseAfterReservation(Integer userId, Integer appointmentId){
+        Appointment appointment = findById(appointmentId);
+
+        for(Equipment e : appointment.getEquipmentList()){
+            equipmentService.delete(e.getId());
+        }
+
+        userService.penalize(userId, 2);
+
+        appointment.setStatus(AppointmentStatus.PENALISED);
+        return appointmentRepository.save(appointment);
+    }
+    @Transactional(readOnly = false)
+    public Appointment pickUpEquipment(Integer appointmentId){
+        Appointment appointment = findById(appointmentId);
+
+        for(Equipment e : appointment.getEquipmentList()){
+            equipmentService.delete(e.getId());
+        }
+
+        appointment.setStatus(AppointmentStatus.PICKEDUP);
+        appointment.setPickUpDateTime(LocalDateTime.now());
+
+        return appointmentRepository.save(appointment);
+    }
 }
