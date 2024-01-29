@@ -297,6 +297,10 @@ public class AppointmentService {
         appointment.setStatus(AppointmentStatus.PICKEDUP);
         appointment.setPickUpDateTime(LocalDateTime.now());
 
+        emailService.sendEmailAfterDoneAppointment(userService.findById(appointment.getUserId()).getEmail(), "<div>\n" +
+                "    <p>Congratulations, you've successfully picked up your reservation!</p>\n" +
+                "</div>\n");
+
         return appointmentRepository.save(appointment);
     }
     public List<AppointmentDTO> findAvailableAppointments(LocalDateTime dateTime, Integer companyId) {

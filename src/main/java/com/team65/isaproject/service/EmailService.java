@@ -33,7 +33,7 @@ public class EmailService {
     private final QRCodeService qrCodeService;
     private final EquipmentRepository equipmentRepository;
 
-    public void sendEmailAfterDoneAppointment(String receiver) {
+    public void sendEmailAfterDoneAppointment(String receiver, String messageContent) {
         // Sender's email ID needs to be mentioned
         String from = "isaproject96@gmail.com";
 
@@ -77,7 +77,7 @@ public class EmailService {
             message.setSubject("Appointment status");
 
             message.setContent(
-                    "<h3>Appointment done successfully</h3>",
+                    messageContent,
                     "text/html");
 
             System.out.println("sending...");
