@@ -10,6 +10,7 @@ import com.team65.isaproject.service.QRCodeService;
 import com.team65.isaproject.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -140,6 +143,15 @@ public class AppointmentController {
         for (Appointment a : appointments) {
             appointmentDTOS.add(mapper.mapToDto(a, AppointmentDTO.class));
         }
+
+        return new ResponseEntity<>(appointmentDTOS, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/getAvailable/{companyId}")
+    public ResponseEntity<List<AppointmentDTO>> getAvailableAppointments(@PathVariable Integer companyId, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) String date) {
+        LocalDateTime localDateTime = LocalDateTime.parse(date);
+
+        List<AppointmentDTO> appointmentDTOS = appointmentService.findAvailableAppointments(localDateTime, companyId);
 
         return new ResponseEntity<>(appointmentDTOS, HttpStatus.OK);
     }
