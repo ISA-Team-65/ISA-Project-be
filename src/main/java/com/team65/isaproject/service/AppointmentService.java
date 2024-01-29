@@ -273,6 +273,7 @@ public class AppointmentService {
         userService.penalize(userId, 2);
 
         appointment.setStatus(AppointmentStatus.PENALISED);
+
         return appointmentRepository.save(appointment);
     }
     @Transactional(readOnly = false)
