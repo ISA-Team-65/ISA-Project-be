@@ -103,6 +103,19 @@ public class AppointmentService {
         var appointment = findById(appointmentId);
 
         LocalDateTime currentDateAndTime = LocalDateTime.now();
+        LocalDateTime appointmentStartDateTime = appointment.getDateTime();
+
+        LocalDateTime appointmentEndDateTime = appointmentStartDateTime.plus((int)appointment.getDuration(), ChronoUnit.MINUTES);
+        var provera = currentDateAndTime.isBefore(appointmentEndDateTime);
+
+        return provera;
+    }
+
+    public boolean checkIfPickUpDateDidntCome(String decodedQR) {
+        var appointmentId = extractAppointmentId(decodedQR);
+        var appointment = findById(appointmentId);
+
+        LocalDateTime currentDateAndTime = LocalDateTime.now();
 
         return currentDateAndTime.toLocalDate().isBefore(appointment.getDateTime().toLocalDate());
     }

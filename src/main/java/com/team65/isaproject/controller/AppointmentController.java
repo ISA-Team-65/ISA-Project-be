@@ -100,6 +100,10 @@ public class AppointmentController {
             userService.penalize(userId, 2);
             return ResponseEntity.ok("penalized");
         }
+        var checkIfPickUpDateDidntCome = appointmentService.checkIfPickUpDateDidntCome(decodedQR);
+        if (checkIfPickUpDateDidntCome) {
+            return ResponseEntity.ok("early");
+        }
         return ResponseEntity.ok(decodedQR);
     }
 
