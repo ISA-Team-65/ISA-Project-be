@@ -58,7 +58,6 @@ public class IsaprojectApplication {
 
 	@Bean
 	Queue queue() { return new Queue("delivery", true); }
-
 	@Bean
 	public ConnectionFactory connectionFactory() {
         return new CachingConnectionFactory("localhost");
