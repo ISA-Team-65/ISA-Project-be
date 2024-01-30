@@ -9,6 +9,8 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import com.team65.isaproject.dto.AppointmentDTO;
 import com.team65.isaproject.dto.EquipmentDTO;
 import com.team65.isaproject.mapper.Mapper;
+import com.team65.isaproject.model.Company;
+import com.team65.isaproject.model.DeliveryData;
 import com.team65.isaproject.model.appointment.Appointment;
 import com.team65.isaproject.model.appointment.AppointmentStatus;
 import com.team65.isaproject.model.equipment.Equipment;
@@ -17,7 +19,13 @@ import com.team65.isaproject.repository.AppointmentRepository;
 import com.team65.isaproject.repository.CompanyRepository;
 import com.team65.isaproject.repository.EquipmentRepository;
 import com.team65.isaproject.repository.UserRepository;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,6 +54,12 @@ public class AppointmentService {
     private final EquipmentService equipmentService;
     private final UserService userService;
     private final CompanyRepository companyRepository;
+    private final AddressService addressService;
+    private static final Logger log = LoggerFactory.getLogger(AppointmentService.class);
+    private final RabbitTemplate rabbitTemplate;
+
+    @Getter
+    private final List<DeliveryData> deliveryData = new ArrayList<>();
 
 
     public List<Appointment> findAll(){
@@ -357,5 +371,65 @@ public class AppointmentService {
             }
         }
         return availableAppointments;
+    }
+
+    public String startDelivery(Integer appointmentId, Integer intervalInSeconds) {
+        try {
+            deliveryData.clear();
+
+            var appointment = appointmentRepository.findById(appointmentId);
+            var company = companyRepository.findById(appointment.orElseThrow().getCompanyId());
+            var user = userRepository.findById(appointment.get().getUserId());
+            var userAddress = addressService.findById(user.orElseThrow().getAddressId());
+            String message = buildMessage(company, userAddress, intervalInSeconds);
+            log.info("Sending> ... Message=[ " + message + " ] RoutingKey=[ delivery ]");
+            rabbitTemplate.convertAndSend("delivery", message);
+            return "Delivery started";
+        } catch (Exception e) {
+            return "Error occurred";
+        }
+    }
+
+    private String buildMessage(Optional<Company> company, com.team65.isaproject.model.Address userAddress, Integer intervalInSeconds) {
+        return String.format(
+                """
+                    
+                    {
+                        lat: %s,
+                        lng: %s,
+                    },
+                    {
+                        lat: %s,
+                        lng: %s,
+                    },
+                    %s
+                """,
+                company.orElseThrow().getAddress().getLatitude(),
+                company.orElseThrow().getAddress().getLongitude(),
+                userAddress.getLatitude(),
+                userAddress.getLongitude(),
+                intervalInSeconds);
+    }
+
+    @RabbitListener(queues = "deliveryResponse")
+    public void deliveryHandler(String message) {
+        DeliveryData data = parseDeliveryMessage(message);
+        deliveryData.add(data);
+    }
+
+    private DeliveryData parseDeliveryMessage(String message) {
+        String pattern = "lat: (-?\\d+\\.\\d+),\\s+lng: (-?\\d+\\.\\d+)";
+
+        Pattern regex = Pattern.compile(pattern);
+        Matcher matcher = regex.matcher(message);
+
+        double lat = 0;
+        double lng = 0;
+
+        if (matcher.find()) {
+            lat = Double.parseDouble(matcher.group(1));
+            lng = Double.parseDouble(matcher.group(2));
+        }
+        return new DeliveryData(lat, lng);
     }
 }

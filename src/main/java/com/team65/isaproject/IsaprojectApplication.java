@@ -1,6 +1,10 @@
 package com.team65.isaproject;
 
+import com.rabbitmq.client.AMQP;
 import org.modelmapper.ModelMapper;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -50,5 +54,13 @@ public class IsaprojectApplication {
 	@Bean
 	public ModelMapper getModelMapper() {
 		return new ModelMapper();
+	}
+
+	@Bean
+	Queue queue() { return new Queue("delivery", true); }
+
+	@Bean
+	public ConnectionFactory connectionFactory() {
+        return new CachingConnectionFactory("localhost");
 	}
 }

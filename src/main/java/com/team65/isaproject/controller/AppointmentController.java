@@ -3,6 +3,7 @@ package com.team65.isaproject.controller;
 import com.google.zxing.NotFoundException;
 import com.team65.isaproject.dto.AppointmentDTO;
 import com.team65.isaproject.mapper.Mapper;
+import com.team65.isaproject.model.DeliveryData;
 import com.team65.isaproject.model.appointment.Appointment;
 import com.team65.isaproject.service.AppointmentService;
 import com.team65.isaproject.service.EquipmentService;
@@ -176,5 +177,23 @@ public class AppointmentController {
         var appointment = appointmentService.pickUpEquipment(appointmentId);
 //        return new ResponseEntity<>(appointment, HttpStatus.OK);
         return new ResponseEntity<>(mapper.mapToDto(appointment, AppointmentDTO.class), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/startDelivery")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<String> startDelivery(@RequestParam Integer appointmentId, @RequestParam Integer intervalInSeconds) {
+        var response = appointmentService.startDelivery(appointmentId, intervalInSeconds);
+        if (response.equals("Delivery started")) {
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(value = "/deliveryData")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List<DeliveryData>> getDeliveryData() {
+        var response = appointmentService.getDeliveryData();
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
