@@ -82,10 +82,17 @@ public class AppointmentService {
         }
     }
 
+    @Transactional(readOnly = false)
     public int update(String decodedQR) {
         var appointmentId = extractAppointmentId(decodedQR);
         var appointment = findById(appointmentId);
         appointment.setStatus(AppointmentStatus.PICKEDUP);
+        appointment.setPickUpDateTime(LocalDateTime.now());
+
+        emailService.sendEmailAfterDoneAppointment(userService.findById(appointment.getUserId()).getEmail(), "<div>\n" +
+                "    <p>Congratulations, you've successfully picked up your reservation!</p>\n" +
+                "</div>\n");
+
         var temp = appointmentRepository.save(appointment);
 
         return appointmentId;
@@ -100,11 +107,18 @@ public class AppointmentService {
         return currentDateAndTime.toLocalDate().isBefore(appointment.getDateTime().toLocalDate());
     }
 
+    @Transactional(readOnly = false)
     public int penaliseAppointment(String decodedQR) {
         var appointmentId = extractAppointmentId(decodedQR);
         var appointment = findById(appointmentId);
 
+        for(Equipment e : appointment.getEquipmentList()){
+            e.setAppointment(null);
+            equipmentService.save(e);
+        }
+
         appointment.setStatus(AppointmentStatus.PENALISED);
+        appointmentRepository.save(appointment);
 
         return appointment.getUserId();
     }
