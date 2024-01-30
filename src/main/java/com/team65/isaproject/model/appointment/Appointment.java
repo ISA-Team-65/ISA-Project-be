@@ -27,6 +27,7 @@ public class Appointment {
     private boolean isReserved;
     private Integer userId;
     private Integer adminId;
+    private LocalDateTime pickUpDateTime;
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "appointment")
     private List<Equipment> equipmentList;
 

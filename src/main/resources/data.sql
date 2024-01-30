@@ -12,10 +12,11 @@ VALUES
 
 INSERT INTO Appointment (id, date_time, duration, status, company_id, is_reserved, user_id, admin_id)
 VALUES
-    (-1, '2024-01-29 10:00:00', 20, 0, -1, TRUE, -1, -2),
+    (-1, '2024-01-29 10:00:00', 20, 1, -1, TRUE, -1, -2),
     (-2, '2024-12-22 14:30:00', 15, 0, -1, FALSE, NULL, -2),
-    (-3, '2024-12-28 16:15:00', 40, 0, -3, FALSE, NULL, -2),
-    (-4, '2024-12-26 17:45:00', 40, 0, -2, FALSE, NULL, -2);
+    (-3, '2024-12-28 16:15:00', 40, 0, -3, FALSE, NULL, -5),
+    (-4, '2024-12-26 17:45:00', 40, 0, -2, FALSE, NULL, -4),
+    (-5, '2024-01-29 10:00:00', 33, 0, -1, TRUE, -1, -2);
 
 
 INSERT INTO Equipment (id, name, type, description, rating, price, company_id, appointment_id)
@@ -25,11 +26,15 @@ VALUES
     (-3, 'Equipment3', 2, 'Description3', 4.5, 180.0, -1, -1),  -- 2 odgovara ordinalnoj vrednosti za TYPE3
     (-4, 'Equipment4', 3, 'Description4', 4.5, 180.0, -1, NULL),  --3
     (-5, 'Equipment5', 4, 'Description5', 4.5, 180.0, -1, NULL),  --4
-    (-6, 'Equipment6', 4, 'Description6', 4.5, 180.0, -3, NULL);
+    (-6, 'Equipment6', 4, 'Description6', 4.5, 180.0, -3, NULL),
+    (-7, 'Equipment7', 4, 'Description7', 2.5, 170.0, -1, -5),
+    (-8, 'Equipment8', 4, 'Description8', 3.5, 100.0, -1, -5);
 
 INSERT INTO _user (id, address_id, email, enabled, first_name, last_name, last_password_reset_date, password, phone_number, profession, username, company_id, role, penalty_points)
 VALUES
-    (-1, -1, 'peraperic@gmail.com', true, 'Pera', 'Peric', null, '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '+38763245234', 'programmer', 'peraperic', -1, 'USER', 0),
+    (-1, -1, 'peraperic@gmail.com', true, 'Pera', 'Peric', null, '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '+38763245234', 'programmer', 'peraperic', NULL, 'USER', 0),
     (-2, -2 , 'peraperic@gmail.com', true, 'Pera', 'Peric', null, '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '+38763245234', 'programmer', 'peraperic1', -1, 'COMPANY_ADMIN', 0),
-    (-3, -3 , 'peraperic@gmail.com', true, 'Pera', 'Peric', null, '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '+38763245234', 'programmer', 'peraperic2', -1, 'SYSTEM_ADMIN', 0);
+    (-3, -3 , 'peraperic@gmail.com', true, 'Pera', 'Peric', null, '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '+38763245234', 'programmer', 'peraperic2', NULL, 'SYSTEM_ADMIN', 0),
+    (-4, -2 , 'peraperic@gmail.com', true, 'Pera', 'Peric', null, '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '+38763245234', 'programmer', 'peraperic3', -2, 'COMPANY_ADMIN', 0),
+    (-5, -1 , 'peraperic@gmail.com', true, 'Pera', 'Peric', null, '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', '+38763245234', 'programmer', 'peraperic4', -3, 'COMPANY_ADMIN', 0);
 

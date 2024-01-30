@@ -175,4 +175,22 @@ public class UserController {
         return new ResponseEntity<>(userDTOS, HttpStatus.OK);
     }
 
+    @GetMapping(value = "/allUsers")
+    @PreAuthorize("hasAnyRole('COMPANY_ADMIN', 'SYSTEM_ADMIN')")
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
+        List<User> users = userService.findAll();
+
+        List<UserDTO> userDTOS = new ArrayList<>();
+
+        for (User u : users) {
+            userDTOS.add(mapper.mapToDto(u, UserDTO.class));
+        }
+
+//        if(userDTOS.isEmpty()){
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+
+        return new ResponseEntity<>(userDTOS, HttpStatus.OK);
+    }
+
 }

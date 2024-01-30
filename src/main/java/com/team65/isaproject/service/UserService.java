@@ -102,4 +102,9 @@ public class UserService {
 
         return users;
     }
+
+    public List<User> findAll() { return repository.findAll(); }
+    public List<User> findByCompanyId(Integer companyId) {
+        return repository.findAllByCompanyId(companyId);
+    }
 }

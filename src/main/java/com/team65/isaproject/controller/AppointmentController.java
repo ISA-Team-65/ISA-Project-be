@@ -10,6 +10,7 @@ import com.team65.isaproject.service.QRCodeService;
 import com.team65.isaproject.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -110,7 +113,7 @@ public class AppointmentController {
     }
     
     @GetMapping(value = "/byUserId/{id}")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAnyRole('USER', 'COMPANY_ADMIN')")
     public ResponseEntity<List<AppointmentDTO>> getAllByUserId(@PathVariable Integer id) {
         List<Appointment> appointments = appointmentService.getAllAppointmentsByUserId(id);
 
@@ -128,5 +131,46 @@ public class AppointmentController {
     public ResponseEntity<String> cancelAppointment(@PathVariable Integer id, @PathVariable Integer userId) {
         var response = appointmentService.cancel(id, userId);
         return ResponseEntity.ok(response);
+    }
+
+
+    @GetMapping(value = "/byAdminId/{id}")
+    @PreAuthorize("hasRole('COMPANY_ADMIN')")
+    public ResponseEntity<List<AppointmentDTO>> getAllByAdminId(@PathVariable Integer id) {
+        List<Appointment> appointments = appointmentService.getAllAppointmentsByAdminId(id);
+
+        List<AppointmentDTO> appointmentDTOS = new ArrayList<>();
+
+        for (Appointment a : appointments) {
+            appointmentDTOS.add(mapper.mapToDto(a, AppointmentDTO.class));
+        }
+
+        return new ResponseEntity<>(appointmentDTOS, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/getAvailable/{companyId}")
+    public ResponseEntity<List<AppointmentDTO>> getAvailableAppointments(@PathVariable Integer companyId, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) String date) {
+        LocalDateTime localDateTime = LocalDateTime.parse(date);
+
+        List<AppointmentDTO> appointmentDTOS = appointmentService.findAvailableAppointments(localDateTime, companyId);
+
+        return new ResponseEntity<>(appointmentDTOS, HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/penaliseAfterReservation/{userId}/{appointmentId}")
+    @PreAuthorize("hasRole('COMPANY_ADMIN')")
+    public ResponseEntity<AppointmentDTO> penaliseAfterReservation(@PathVariable Integer userId, @PathVariable Integer appointmentId){
+        var appointment = appointmentService.penaliseAfterReservation(userId, appointmentId);
+//        return new ResponseEntity<>(appointment, HttpStatus.OK);
+
+        return new ResponseEntity<>(mapper.mapToDto(appointment, AppointmentDTO.class), HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/pickup/{appointmentId}")
+    @PreAuthorize("hasRole('COMPANY_ADMIN')")
+    public ResponseEntity<AppointmentDTO> pickUpEquipment(@PathVariable Integer appointmentId){
+        var appointment = appointmentService.pickUpEquipment(appointmentId);
+//        return new ResponseEntity<>(appointment, HttpStatus.OK);
+        return new ResponseEntity<>(mapper.mapToDto(appointment, AppointmentDTO.class), HttpStatus.OK);
     }
 }

@@ -24,5 +24,6 @@ public class AppointmentDTO {
     private boolean isReserved;
     private Integer userId;
     private Integer adminId;
+    private LocalDateTime pickUpDateTime;
     private List<EquipmentDTO> equipmentList;
 }

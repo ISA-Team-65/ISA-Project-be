@@ -7,16 +7,20 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.oned.EAN13Writer;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.team65.isaproject.dto.AppointmentDTO;
+import com.team65.isaproject.dto.EquipmentDTO;
 import com.team65.isaproject.mapper.Mapper;
 import com.team65.isaproject.model.appointment.Appointment;
 import com.team65.isaproject.model.appointment.AppointmentStatus;
 import com.team65.isaproject.model.equipment.Equipment;
+import com.team65.isaproject.model.user.User;
 import com.team65.isaproject.repository.AppointmentRepository;
 import com.team65.isaproject.repository.CompanyRepository;
 import com.team65.isaproject.repository.EquipmentRepository;
 import com.team65.isaproject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.imageio.ImageIO;
 import javax.mail.*;
@@ -32,6 +36,7 @@ import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class AppointmentService {
 
     private final AppointmentRepository appointmentRepository;
@@ -51,13 +56,30 @@ public class AppointmentService {
         return appointmentRepository.findById(id).orElse(null);
     }
 
-    public AppointmentDTO update(AppointmentDTO appointmentDto){
-        var appointment = mapper.mapToModel(appointmentDto, Appointment.class);
-        var temp = appointmentRepository.save(appointment);
+    @Transactional(readOnly = false)
+    public AppointmentDTO update(AppointmentDTO appointmentDto) {
+        try {
+            var appointment = mapper.mapToModel(appointmentDto, Appointment.class);
 
-        emailService.sendEmailWithQRCode(userRepository.findById(appointment.getUserId()).orElseThrow().getEmail(), temp);
+            var existingAppointment = appointmentRepository.findById(appointment.getId());
+            if (existingAppointment.isPresent() && existingAppointment.get().isReserved()) {
+                throw new Exception("Appointment already reserved");
+            }
 
-        return mapper.mapToDto(temp, AppointmentDTO.class);
+            var temp = appointmentRepository.save(appointment);
+            for (Equipment item :
+                    appointment.getEquipmentList()) {
+                item.setAppointment(appointment);
+                equipmentService.save(item);
+            }
+
+
+            emailService.sendEmailWithQRCode(userRepository.findById(appointment.getUserId()).orElseThrow().getEmail(), temp);
+
+            return mapper.mapToDto(temp, AppointmentDTO.class);
+        } catch (Exception e) {
+            return new AppointmentDTO();
+        }
     }
 
     public int update(String decodedQR) {
@@ -123,9 +145,14 @@ public class AppointmentService {
         return appointments;
     }
 
+    @Transactional(readOnly = false)
     public Optional<AppointmentDTO> createAppointmentWithoutMail(AppointmentDTO appointmentDTO) {
         try {
             var appointment = mapper.mapToModel(appointmentDTO, Appointment.class);
+
+            if (!isAdminAvailable(appointment)) {
+                throw new Exception("Admin is not available in at this time");
+            };
 
             var newAppointment = appointmentRepository.save(appointment);
             return Optional.ofNullable(
@@ -136,21 +163,52 @@ public class AppointmentService {
             return Optional.empty();
         }
     }
+
+    @Transactional(readOnly = false)
     public Optional<AppointmentDTO> create(AppointmentDTO appointmentDTO) {
         try {
             var appointment = mapper.mapToModel(appointmentDTO, Appointment.class);
 
+            if (!isAdminAvailable(appointment)) {
+                throw new Exception("Admin is not available in at this time");
+            };
+
             var newAppointment = appointmentRepository.save(appointment);
+
+            if (!appointment.getEquipmentList().isEmpty()) {
+                for (Equipment item :
+                        appointment.getEquipmentList()) {
+                    item.setAppointment(appointment);
+                    equipmentService.save(item);
+                }
+            }
+
             emailService.sendEmailWithQRCode(userRepository.findById(appointment.getUserId()).orElseThrow().getEmail(), newAppointment);
             return Optional.ofNullable(
                     mapper.mapToDto(
                             newAppointment,
                             AppointmentDTO.class));
+
         } catch (Exception e) {
             return Optional.empty();
         }
     }
-    
+
+    private boolean isAdminAvailable(Appointment appointment) {
+        var appointmentsWithSameAdmin = appointmentRepository.findAllByAdminId(appointment.getAdminId());
+        if (appointmentsWithSameAdmin.isPresent()) {
+            for (Appointment existingAppointment :
+                    appointmentsWithSameAdmin.get()) {
+                var existingDateTimeStart = existingAppointment.getDateTime();
+                var existingDateTimeEnd = existingDateTimeStart.plusMinutes((int)existingAppointment.getDuration());
+                if (!appointment.getDateTime().isBefore(existingDateTimeStart) && !appointment.getDateTime().isAfter(existingDateTimeEnd)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     public List<Appointment> getAllAppointmentsByUserId(Integer id) {
 
         ArrayList<Appointment> appointments = new ArrayList<>();
@@ -164,6 +222,7 @@ public class AppointmentService {
         return appointments;
     }
 
+    @Transactional(readOnly = false)
     public String cancel(Integer id, Integer userId) {
         try {
             equipmentService.removeAppointment(id);
@@ -188,6 +247,7 @@ public class AppointmentService {
         }
     }
 
+    @Transactional(readOnly = false)
     public String delete(Integer id) {
         try {
             equipmentService.removeAppointment(id);
@@ -196,5 +256,79 @@ public class AppointmentService {
         } catch (Exception e) {
             return "Deletion unsuccessful";
         }
+    }
+
+    public List<Appointment> getAllAppointmentsByAdminId(Integer id) {
+
+        ArrayList<Appointment> appointments = new ArrayList<>();
+
+        for (Appointment a : findAll()) {
+            if (a.getAdminId() != null && a.getAdminId().equals(id) && a.isReserved()) {
+                appointments.add(a);
+            }
+        }
+
+        return appointments;
+    }
+
+    @Transactional(readOnly = false)
+    public Appointment penaliseAfterReservation(Integer userId, Integer appointmentId){
+        Appointment appointment = findById(appointmentId);
+
+        for(Equipment e : appointment.getEquipmentList()){
+            e.setAppointment(null);
+            equipmentService.save(e);
+        }
+
+        userService.penalize(userId, 2);
+
+        appointment.setStatus(AppointmentStatus.PENALISED);
+
+        return appointmentRepository.save(appointment);
+    }
+    @Transactional(readOnly = false)
+    public Appointment pickUpEquipment(Integer appointmentId) {
+        Appointment appointment = findById(appointmentId);
+
+        for (Equipment e : appointment.getEquipmentList()) {
+            equipmentService.delete(e.getId());
+        }
+
+        appointment.setStatus(AppointmentStatus.PICKEDUP);
+        appointment.setPickUpDateTime(LocalDateTime.now());
+
+        emailService.sendEmailAfterDoneAppointment(userService.findById(appointment.getUserId()).getEmail(), "<div>\n" +
+                "    <p>Congratulations, you've successfully picked up your reservation!</p>\n" +
+                "</div>\n");
+
+        return appointmentRepository.save(appointment);
+    }
+    public List<AppointmentDTO> findAvailableAppointments(LocalDateTime dateTime, Integer companyId) {
+        List<AppointmentDTO> availableAppointments = new ArrayList<AppointmentDTO>();
+        for (int i = 0; i < 8; i++) {
+            var dateForAppointment = dateTime.withHour(8 + i + 1).withMinute(0);
+            var potentialAdmins = userService.findByCompanyId(companyId);
+            for (User admin :
+                    potentialAdmins) {
+                var potentialAppointment = AppointmentDTO
+                        .builder()
+                        .id(0)
+                        .dateTime(dateForAppointment)
+                        .duration(60.0)
+                        .status(AppointmentStatus.NEW)
+                        .companyId(companyId)
+                        .isReserved(false)
+                        .userId(null)
+                        .adminId(admin.getId())
+                        .equipmentList(new ArrayList<EquipmentDTO>())
+                        .build();
+
+                if (isAdminAvailable(mapper.mapToModel(potentialAppointment, Appointment.class))) {
+                    availableAppointments.add(potentialAppointment);
+                    break;
+                }
+            }
+        }
+        return availableAppointments;
     }
 }
