@@ -1,5 +1,6 @@
 package com.team65.isaproject.controller;
 
+import com.team65.isaproject.dto.ContractDTO;
 import com.team65.isaproject.dto.EquipmentDTO;
 import com.team65.isaproject.mapper.Mapper;
 import com.team65.isaproject.model.equipment.Equipment;
@@ -136,5 +137,12 @@ public class EquipmentController {
 
         updatedEquipmentDto = equipmentService.save(updatedEquipmentDto);
         return new ResponseEntity<>( updatedEquipmentDto, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/contract")
+    public ResponseEntity<ContractDTO> getActiveContract(){
+        var activeContract = equipmentService.getActiveContract();
+
+        return new ResponseEntity<>(activeContract, HttpStatus.OK);
     }
 }

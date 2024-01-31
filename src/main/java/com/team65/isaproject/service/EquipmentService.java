@@ -1,18 +1,27 @@
 package com.team65.isaproject.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.team65.isaproject.dto.ContractDTO;
 import com.team65.isaproject.dto.EquipmentDTO;
 import com.team65.isaproject.mapper.Mapper;
+import com.team65.isaproject.model.DeliveryData;
 import com.team65.isaproject.model.equipment.Equipment;
+import com.team65.isaproject.model.equipment.EquipmentType;
 import com.team65.isaproject.repository.EquipmentRepository;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 import static java.lang.Math.round;
@@ -22,12 +31,16 @@ import static java.lang.Math.round;
 public class EquipmentService {
 
     private static final Logger log = LoggerFactory.getLogger(EquipmentService.class);
+    private Timer timer;
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
     private final EquipmentRepository equipmentRepository;
     private final Mapper<Equipment, EquipmentDTO> mapper;
+
+    @Getter
+    private ContractDTO activeContract = new ContractDTO();
 
     public List<Equipment> findAll(){
         return equipmentRepository.findAll();
@@ -104,6 +117,46 @@ public class EquipmentService {
     @RabbitListener(queues = "contract")
     public void contractHandler(String message) {
         log.info("Consumer> " + message);
-        //TODO cuvanje ugovora
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String contractJson = message;
+
+        try {
+            activeContract = objectMapper.readValue(contractJson, ContractDTO.class);
+            try {
+                LocalDate deliveryDate = LocalDate.parse(activeContract.getDeliveryDate());
+
+                if (timer != null) {
+                    timer.cancel();
+                }
+
+                timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        if (deliveryDate.minusDays(3).getDayOfMonth() == LocalDate.now().getDayOfMonth()) {
+                            for (var eq : activeContract.getEquipment()) {
+                                if (equipmentRepository.findAll().stream()
+                                        .noneMatch(type -> eq.getType().equals(type.toString()))){
+                                    log.info("Sending> ... Message=[ Agreed equipment quantity is unavailable for the upcoming delivery. ] RoutingKey=[ contractResponse ]");
+                                    rabbitTemplate.convertAndSend("contractResponse", "Agreed equipment quantity is unavailable for the upcoming delivery.");
+                                    break;
+                                }
+                            }
+                        }
+                        else if (deliveryDate.getDayOfMonth() == LocalDate.now().getDayOfMonth()) {
+                            log.info("Sending> ... Message=[ Commencing equipment delivery. We're on our way! ] RoutingKey=[ contractResponse ]");
+                            rabbitTemplate.convertAndSend("contractResponse", "Commencing equipment delivery. We're on our way!");
+                        }
+                        System.out.println(activeContract);
+                    }
+                }, 0, 86400000);
+            } catch (Exception e) {
+                log.error("Error parsing delivery date: " + activeContract.getDeliveryDate(), e);
+            }
+
+        } catch (JsonProcessingException e) {
+            log.error("Error parsing JSON", e);
+        }
     }
 }
