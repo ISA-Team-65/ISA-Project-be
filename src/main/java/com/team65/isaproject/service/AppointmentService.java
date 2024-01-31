@@ -242,7 +242,9 @@ public class AppointmentService {
                     appointmentsWithSameAdmin.get()) {
                 var existingDateTimeStart = existingAppointment.getDateTime();
                 var existingDateTimeEnd = existingDateTimeStart.plusMinutes((int)existingAppointment.getDuration());
-                if (!appointment.getDateTime().isBefore(existingDateTimeStart) && !appointment.getDateTime().isAfter(existingDateTimeEnd)) {
+                if ((appointment.getDateTime().isBefore(existingDateTimeEnd) || appointment.getDateTime().isEqual(existingDateTimeEnd)) &&
+                        (appointment.getDateTime().plusMinutes((int)appointment.getDuration()).isAfter(existingDateTimeStart) ||
+                                appointment.getDateTime().plusMinutes((int)appointment.getDuration()).isEqual(existingDateTimeStart))) {
                     return false;
                 }
             }
